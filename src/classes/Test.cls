@@ -4,4 +4,7 @@
 
 public with sharing class Test {
 
+    public void test() {
+        System.debug('Hello!');
+    }
 }
