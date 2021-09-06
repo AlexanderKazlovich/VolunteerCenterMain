@@ -7,5 +7,6 @@ public with sharing class Test {
     public void test() {
         System.debug('Hello!');
         System.debug('');
+        System.debug('Great time');
     }
 }
