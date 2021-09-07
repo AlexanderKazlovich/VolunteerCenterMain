@@ -35,8 +35,7 @@ public with sharing class TodoTriggerHelper {
             TodoCallouts.makePostCallout(
                     todo.Name,
                     todo.Comments__c,
-//                    todo.DateTime__c,
-                    todo.isCompleted__c,
+                    todo.DateTime__c,
                     todo.Priority__c,
                     todo.Purchase__c
             );

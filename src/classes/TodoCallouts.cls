@@ -12,19 +12,32 @@ public with sharing class TodoCallouts {
     public static void makePostCallout(
             String name,
             String comments,
-//            Datetime thisDateTime,
-            Boolean isCompleted,
+            Datetime thisDateTime,
             String priority,
             String purchase
     ) {
+
+        if(String.isBlank(priority)) {
+            priority = '';
+        }
+
+        System.debug(thisDateTime);
+
+        String dateSplit = String.valueOf(thisDateTime.date());
+        String timeSplit = String.valueOf(thisDateTime.time());
+
+        System.debug(dateSplit);
+        System.debug(timeSplit);
+
+        String dateTimeJson = dateSplit + 'T' + timeSplit;
+
         String populateBody = '{' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
-//                '"thisDateTime" : ' + thisDateTime + ', ' +
-                '"isCompleted" : ' + isCompleted + ', ' +
+                '"thisDateTime" : "' + dateTimeJson + '", ' +
                 '"priority" : "' + priority + '", ' +
                 '"purchase" : "' + purchase + '" }';
-//                '}';
+        System.debug(populateBody);
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
