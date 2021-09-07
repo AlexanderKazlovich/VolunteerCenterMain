@@ -4,10 +4,10 @@
 
 public with sharing class TodoTriggerHandler {
 
+
+
     public static void handleBeforeInsert(List<Todo__c> newList) {
-        for (Todo__c todo: newList) {
-            TodoCallouts.makePostCallout(todo.Name);
-        }
+        TodoTriggerHelper.makeCallouts(newList);
         // EXECUTE BEFORE INSERT LOGIC
     }
 

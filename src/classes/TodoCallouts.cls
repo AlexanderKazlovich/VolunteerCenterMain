@@ -23,5 +23,4 @@ public with sharing class TodoCallouts {
             System.debug('The Todo is successful created with Id ' + response.getBody());
         }
     }
-
 }

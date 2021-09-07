@@ -30,4 +30,10 @@ public with sharing class TodoTriggerHelper {
         }
     }
 
+    public static void makeCallouts(List<Todo__c> newList) {
+        for (Todo__c todo: newList) {
+            TodoCallouts.makePostCallout(todo.Name);
+        }
+    }
+
 }
