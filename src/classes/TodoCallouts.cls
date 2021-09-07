@@ -14,29 +14,48 @@ public with sharing class TodoCallouts {
             String comments,
             Datetime thisDateTime,
             String priority,
-            String purchase
+            String purchase,
+            String status
     ) {
 
         if(String.isBlank(priority)) {
             priority = '';
         }
 
+        if(String.isBlank(status)) {
+            status = '';
+        }
+
         System.debug(thisDateTime);
 
-        String dateSplit = String.valueOf(thisDateTime.date());
-        String timeSplit = String.valueOf(thisDateTime.time());
+        String dateSplit;
+        String timeSplit;
+        String dateTimeJson;
 
+        String checkDate = String.valueOfGmt(thisDateTime);
+        System.debug(checkDate);
+
+        if(String.isNotBlank(checkDate)) {
+
+            dateSplit = String.valueOf(thisDateTime.date());
+            timeSplit = String.valueOf(thisDateTime.time());
+            dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
+            System.debug('dateTimeJson: ' + dateTimeJson);
+        } else {
+            dateTimeJson = '"1921-01-01T00:00:00.000Z"';
+        }
+
+        System.debug(dateTimeJson);
         System.debug(dateSplit);
         System.debug(timeSplit);
-
-        String dateTimeJson = dateSplit + 'T' + timeSplit;
 
         String populateBody = '{' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
-                '"thisDateTime" : "' + dateTimeJson + '", ' +
+                '"thisDateTime" : ' + dateTimeJson + ', ' +
                 '"priority" : "' + priority + '", ' +
-                '"purchase" : "' + purchase + '" }';
+                '"purchase" : "' + purchase + '", ' +
+                '"status" : "' + status + '" }';
         System.debug(populateBody);
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');

@@ -37,7 +37,8 @@ public with sharing class TodoTriggerHelper {
                     todo.Comments__c,
                     todo.DateTime__c,
                     todo.Priority__c,
-                    todo.Purchase__c
+                    todo.Purchase__c,
+                    todo.Status__c
             );
         }
     }
