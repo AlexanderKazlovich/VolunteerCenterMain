@@ -32,7 +32,14 @@ public with sharing class TodoTriggerHelper {
 
     public static void makeCallouts(List<Todo__c> newList) {
         for (Todo__c todo: newList) {
-            TodoCallouts.makePostCallout(todo.Name);
+            TodoCallouts.makePostCallout(
+                    todo.Name,
+                    todo.Comments__c,
+//                    todo.DateTime__c,
+                    todo.isCompleted__c,
+                    todo.Priority__c,
+                    todo.Purchase__c
+            );
         }
     }
 
