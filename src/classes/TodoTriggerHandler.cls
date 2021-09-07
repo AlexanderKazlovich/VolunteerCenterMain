@@ -5,6 +5,9 @@
 public with sharing class TodoTriggerHandler {
 
     public static void handleBeforeInsert(List<Todo__c> newList) {
+        for (Todo__c todo: newList) {
+            TodoCallouts.makePostCallout(todo.Name);
+        }
         // EXECUTE BEFORE INSERT LOGIC
     }
 
