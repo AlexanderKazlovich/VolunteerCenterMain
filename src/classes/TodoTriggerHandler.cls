@@ -6,7 +6,6 @@ public with sharing class TodoTriggerHandler {
 
     public static void handleBeforeInsert(List<Todo__c> newList) {
         TodoTriggerHelper.assignTodoOnQueue(newList);
-        TodoTriggerHelper.makeCallouts(newList);
         // EXECUTE BEFORE INSERT LOGIC
     }
 
@@ -16,11 +15,11 @@ public with sharing class TodoTriggerHandler {
 
 
     public static void handleBeforeDelete(List<Todo__c> oldList, Map<Id, Todo__c> oldMap) {
-        TodoTriggerHelper.deleteCallouts(oldList);
         // BEFORE DELETE LOGIC
     }
 
     public static void handleAfterInsert(List<Todo__c> newList, Map<Id, Todo__c> newMap) {
+        TodoTriggerHelper.makeCallouts(newList);
         // EXECUTE AFTER INSERT LOGIC
     }
 
@@ -29,6 +28,7 @@ public with sharing class TodoTriggerHandler {
     }
 
     public static void handleAfterDelete(List<Todo__c> oldList, Map<Id, Todo__c> oldMap) {
+        TodoTriggerHelper.deleteCallouts(oldList);
         // AFTER DELETE LOGIC
     }
 
