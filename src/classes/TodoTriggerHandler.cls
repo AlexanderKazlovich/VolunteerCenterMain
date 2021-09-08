@@ -16,6 +16,7 @@ public with sharing class TodoTriggerHandler {
 
 
     public static void handleBeforeDelete(List<Todo__c> oldList, Map<Id, Todo__c> oldMap) {
+        TodoTriggerHelper.deleteCallouts(oldList);
         // BEFORE DELETE LOGIC
     }
 

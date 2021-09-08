@@ -10,7 +10,6 @@ public with sharing class TodoCallouts {
 
     @Future(Callout=true)
     public static void makePostCallout(
-            String id,
             String name,
             String comments,
             Datetime thisDateTime,
@@ -29,34 +28,34 @@ public with sharing class TodoCallouts {
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
         request.setBody(populateBody);
+        System.debug(populateBody);
         HttpResponse response = http.send(request);
         if (response.getStatusCode() != 200) {
             System.debug('The status code returned was not expected: ' +
                     response.getStatusCode() + ' ' + response.getStatus());
         } else {
             System.debug('The Todo is successful created with Id ' + response.getBody());
-            Todo__c todo = [SELECT Id, Name FROM Todo__c WHERE Id = :id LIMIT 1];
-            System.debug(todo);
-            todo.IdSecondOrg__c = response.getBody();
-            update todo;
-            Todo__c todo2 = [SELECT Id, Name, IdSecondOrg__c FROM Todo__c WHERE Id = :id LIMIT 1];
-            System.debug(todo2);
+//            Todo__c todo = [SELECT Id, Name FROM Todo__c WHERE Id = :id LIMIT 1];
+//            System.debug(todo);
+//            todo.IdSecondOrg__c = response.getBody();
+//            update todo;
+//            Todo__c todo2 = [SELECT Id, Name, IdSecondOrg__c FROM Todo__c WHERE Id = :id LIMIT 1];
+//            System.debug(todo2);
         }
     }
 
-//    @Future(Callout=true)
-//    public static HttpResponse makeDeleteCallout(String id) {
-//        request.setEndpoint(ENDPOINT + id);
-//        request.setMethod('DELETE');
-//        HttpResponse response = http.send(request);
-//        if (response.getStatusCode() == 200) {
-//            System.debug('Todo is deleted');
-//        } else {
-//            System.debug('The status code returned was not expected: ' +
-//                    response.getStatusCode() + ' ' + response.getStatus());
-//        }
-//        return response;
-//    }
+    @Future(Callout=true)
+    public static void makeDeleteCallout(String id) {
+        request.setEndpoint(ENDPOINT + id);
+        request.setMethod('DELETE');
+        HttpResponse response = http.send(request);
+        if (response.getStatusCode() == 200) {
+            System.debug('Todo is deleted');
+        } else {
+            System.debug('The status code returned was not expected: ' +
+                    response.getStatusCode() + ' ' + response.getStatus());
+        }
+    }
 
     private static String handleDateTime(Datetime thisDateTime) {
 
@@ -67,8 +66,8 @@ public with sharing class TodoCallouts {
         String checkDate = String.valueOfGmt(thisDateTime);
 
         if (String.isNotBlank(checkDate)) {
-            dateSplit = String.valueOf(thisDateTime.date());
-            timeSplit = String.valueOf(thisDateTime.time());
+            dateSplit = String.valueOf(thisDateTime.dateGmt());
+            timeSplit = String.valueOf(thisDateTime.timeGmt());
             dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
         } else {
             dateTimeJson = '"1921-01-01T00:00:00.000Z"';

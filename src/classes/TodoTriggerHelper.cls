@@ -26,13 +26,18 @@ public with sharing class TodoTriggerHelper {
     public static void makeCallouts(List<Todo__c> newList) {
         for (Todo__c todo: newList) {
             TodoCallouts.makePostCallout(
-                    todo.Id,
                     todo.Name,
                     todo.Comments__c,
                     todo.DateTime__c,
                     todo.Priority__c,
                     todo.Purchase__c,
                     todo.Status__c);
+        }
+    }
+
+    public static void deleteCallouts(List<Todo__c> oldList) {
+        for (Todo__c todo: oldList) {
+            TodoCallouts.makeDeleteCallout(todo.Id);
         }
     }
 
