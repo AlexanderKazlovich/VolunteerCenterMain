@@ -10,6 +10,7 @@ public with sharing class TodoCallouts {
 
     @Future(Callout=true)
     public static void makePostCallout(
+            String id,
             String name,
             String comments,
             Datetime thisDateTime,
@@ -34,22 +35,28 @@ public with sharing class TodoCallouts {
                     response.getStatusCode() + ' ' + response.getStatus());
         } else {
             System.debug('The Todo is successful created with Id ' + response.getBody());
+            Todo__c todo = [SELECT Id, Name FROM Todo__c WHERE Id = :id LIMIT 1];
+            System.debug(todo);
+            todo.IdSecondOrg__c = response.getBody();
+            update todo;
+            Todo__c todo2 = [SELECT Id, Name, IdSecondOrg__c FROM Todo__c WHERE Id = :id LIMIT 1];
+            System.debug(todo2);
         }
     }
 
-    @Future(Callout=true)
-    public static HttpResponse makeDeleteCallout(String id) {
-        request.setEndpoint(ENDPOINT + id);
-        request.setMethod('DELETE');
-        HttpResponse response = http.send(request);
-        if (response.getStatusCode() == 200) {
-            System.debug('Todo is deleted');
-        } else {
-            System.debug('The status code returned was not expected: ' +
-                    response.getStatusCode() + ' ' + response.getStatus());
-        }
-        return response;
-    }
+//    @Future(Callout=true)
+//    public static HttpResponse makeDeleteCallout(String id) {
+//        request.setEndpoint(ENDPOINT + id);
+//        request.setMethod('DELETE');
+//        HttpResponse response = http.send(request);
+//        if (response.getStatusCode() == 200) {
+//            System.debug('Todo is deleted');
+//        } else {
+//            System.debug('The status code returned was not expected: ' +
+//                    response.getStatusCode() + ' ' + response.getStatus());
+//        }
+//        return response;
+//    }
 
     private static String handleDateTime(Datetime thisDateTime) {
 
