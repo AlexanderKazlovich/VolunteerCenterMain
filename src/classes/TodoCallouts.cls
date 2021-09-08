@@ -17,21 +17,13 @@ public with sharing class TodoCallouts {
             String purchase,
             String status) {
 
-        if(String.isBlank(priority)) {
-            priority = '';
-        }
-
-        if(String.isBlank(status)) {
-            status = '';
-        }
-
         String populateBody = '{' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
-                '"priority" : "' + priority + '", ' +
+                '"priority" : "' + isEmpty(priority) + '", ' +
                 '"purchase" : "' + purchase + '", ' +
-                '"status" : "' + status + '" }';
+                '"status" : "' + isEmpty(status) + '" }';
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -46,13 +38,14 @@ public with sharing class TodoCallouts {
     }
 
     private static String handleDateTime(Datetime thisDateTime) {
+
         String dateSplit;
         String timeSplit;
         String dateTimeJson;
 
         String checkDate = String.valueOfGmt(thisDateTime);
 
-        if(String.isNotBlank(checkDate)) {
+        if (String.isNotBlank(checkDate)) {
             dateSplit = String.valueOf(thisDateTime.date());
             timeSplit = String.valueOf(thisDateTime.time());
             dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
@@ -60,5 +53,12 @@ public with sharing class TodoCallouts {
             dateTimeJson = '"1921-01-01T00:00:00.000Z"';
         }
         return dateTimeJson;
+
+    }
+
+    private static String isEmpty(String checked) {
+
+        return checked = String.isBlank(checked) ? checked = '' : checked;
+
     }
 }
