@@ -15,8 +15,7 @@ public with sharing class TodoCallouts {
             Datetime thisDateTime,
             String priority,
             String purchase,
-            String status
-    ) {
+            String status) {
 
         if(String.isBlank(priority)) {
             priority = '';
@@ -26,37 +25,13 @@ public with sharing class TodoCallouts {
             status = '';
         }
 
-        System.debug(thisDateTime);
-
-        String dateSplit;
-        String timeSplit;
-        String dateTimeJson;
-
-        String checkDate = String.valueOfGmt(thisDateTime);
-        System.debug(checkDate);
-
-        if(String.isNotBlank(checkDate)) {
-
-            dateSplit = String.valueOf(thisDateTime.date());
-            timeSplit = String.valueOf(thisDateTime.time());
-            dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
-            System.debug('dateTimeJson: ' + dateTimeJson);
-        } else {
-            dateTimeJson = '"1921-01-01T00:00:00.000Z"';
-        }
-
-        System.debug(dateTimeJson);
-        System.debug(dateSplit);
-        System.debug(timeSplit);
-
         String populateBody = '{' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
-                '"thisDateTime" : ' + dateTimeJson + ', ' +
+                '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
                 '"priority" : "' + priority + '", ' +
                 '"purchase" : "' + purchase + '", ' +
                 '"status" : "' + status + '" }';
-        System.debug(populateBody);
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -68,5 +43,22 @@ public with sharing class TodoCallouts {
         } else {
             System.debug('The Todo is successful created with Id ' + response.getBody());
         }
+    }
+
+    private static String handleDateTime(Datetime thisDateTime) {
+        String dateSplit;
+        String timeSplit;
+        String dateTimeJson;
+
+        String checkDate = String.valueOfGmt(thisDateTime);
+
+        if(String.isNotBlank(checkDate)) {
+            dateSplit = String.valueOf(thisDateTime.date());
+            timeSplit = String.valueOf(thisDateTime.time());
+            dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
+        } else {
+            dateTimeJson = '"1921-01-01T00:00:00.000Z"';
+        }
+        return dateTimeJson;
     }
 }
