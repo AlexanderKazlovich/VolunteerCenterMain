@@ -4,9 +4,8 @@
 
 public with sharing class TodoTriggerHandler {
 
-
-
     public static void handleBeforeInsert(List<Todo__c> newList) {
+        TodoTriggerHelper.assignTodoOnQueue(newList);
         TodoTriggerHelper.makeCallouts(newList);
         // EXECUTE BEFORE INSERT LOGIC
     }

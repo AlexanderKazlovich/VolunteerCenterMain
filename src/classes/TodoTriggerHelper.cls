@@ -3,15 +3,8 @@
  */
 
 public with sharing class TodoTriggerHelper {
-    private List<Todo__c> newList;
-    private List<Todo__c> oldList;
 
-    public TodoTriggerHelper(List<Todo__c> newList, List<Todo__c> oldList){
-        this.newList = newList;
-        this.oldList = oldList;
-    }
-
-    public void assignTodoOnQueue(){
+    public static void assignTodoOnQueue(List<Todo__c> newList){
         for(Todo__c todo : newList){
             String recordTypeName = Schema.SObjectType.Todo__c.getRecordTypeInfosById().get(todo.RecordTypeId).getName();
             if (recordTypeName == 'Emergency Assistance') {
