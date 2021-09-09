@@ -42,4 +42,16 @@ public with sharing class TodoTriggerHelper {
         }
     }
 
+    public static void putCallouts(List<Todo__c> newList) {
+        for (Todo__c todo: newList) {
+            TodoCallouts.makePutCallout(
+                    todo.Id,
+                    todo.Name,
+                    todo.Comments__c,
+                    todo.DateTime__c,
+                    todo.Priority__c,
+                    todo.Purchase__c,
+                    todo.Status__c);
+        }
+    }
 }

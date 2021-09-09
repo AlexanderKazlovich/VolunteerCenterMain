@@ -52,6 +52,37 @@ public with sharing class TodoCallouts {
         }
     }
 
+    @Future(Callout=true)
+    public static void makePutCallout(
+            String id,
+            String name,
+            String comments,
+            Datetime thisDateTime,
+            String priority,
+            String purchase,
+            String status) {
+
+        String populateBody = '{' +
+                '"id":"' + id + '", ' +
+                '"name":"' + name + '", ' +
+                '"comments":"' + comments + '", ' +
+                '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
+                '"priority" : "' + isEmpty(priority) + '", ' +
+                '"purchase" : "' + purchase + '", ' +
+                '"status" : "' + isEmpty(status) + '" }';
+        request.setEndpoint(ENDPOINT);
+        request.setMethod('PUT');
+        request.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        request.setBody(populateBody);
+        HttpResponse response = http.send(request);
+        if (response.getStatusCode() != 200) {
+            System.debug('The status code returned was not expected: ' +
+                    response.getStatusCode() + ' ' + response.getStatus());
+        } else {
+            System.debug('The Todo is successful changed with Id ' + response.getBody());
+        }
+    }
+
     private static String handleDateTime(Datetime thisDateTime) {
 
         String dateSplit;
@@ -68,7 +99,6 @@ public with sharing class TodoCallouts {
             dateTimeJson = '"1921-01-01T00:00:00.000Z"';
         }
         return dateTimeJson;
-
     }
 
     private static String isEmpty(String checked) {

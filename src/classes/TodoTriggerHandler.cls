@@ -9,7 +9,7 @@ public with sharing class TodoTriggerHandler {
         // EXECUTE BEFORE INSERT LOGIC
     }
 
-    public static void handleBeforeUpdate(List<Todo__c> newList, List<Todo__c> oldList, Map<Id, Todo__c> newMap, Map<Id, Todo__c> oldMap) {
+    public static void handleBeforeUpdate(List<Todo__c> oldList, List<Todo__c> newList, Map<Id, Todo__c> newMap, Map<Id, Todo__c> oldMap) {
         // BEFORE UPDATE LOGIC
     }
 
@@ -23,7 +23,8 @@ public with sharing class TodoTriggerHandler {
         // EXECUTE AFTER INSERT LOGIC
     }
 
-    public static void handleAfterUpdate(List<Todo__c> newList, List<Todo__c> oldList, Map<Id, Todo__c> newMap, Map<Id, Todo__c> oldMap) {
+    public static void handleAfterUpdate(List<Todo__c> oldList, List<Todo__c> newList, Map<Id, Todo__c> newMap, Map<Id, Todo__c> oldMap) {
+        TodoTriggerHelper.putCallouts(newList);
         // AFTER UPDATE LOGIC
     }
 
