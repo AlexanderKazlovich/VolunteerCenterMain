@@ -36,4 +36,5 @@ public with sharing class TodoTriggerHandler {
     public static void handleAfterUndelete(List<Todo__c> newList, Map<Id, Todo__c> newMap) {
         // AFTER UNDELETE LOGIC
     }
+
 }

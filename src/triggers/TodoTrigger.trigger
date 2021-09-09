@@ -38,4 +38,5 @@ trigger TodoTrigger on Todo__c (
     if (Trigger.isAfter && Trigger.isUndelete) {
         TodoTriggerHandler.handleAfterUndelete(Trigger.new, Trigger.newMap);
     }
+
 }

@@ -36,7 +36,6 @@ public with sharing class TodoTriggerHelper {
         }
     }
 
-
     public static void deleteCallouts(List<Todo__c> oldList) {
         for (Todo__c todo : oldList) {
             TodoCallouts.makeDeleteCallout(todo.Id);
