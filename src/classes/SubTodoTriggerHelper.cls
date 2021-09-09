@@ -17,4 +17,10 @@ public class SubTodoTriggerHelper {
             );
         }
     }
+
+    public static void deleteCallouts(List<Sub_Todo__c> oldList) {
+        for (Sub_Todo__c subTodo : oldList) {
+            SubTodoCallouts.makeDeleteCallout(subTodo.Id);
+        }
+    }
 }
