@@ -39,6 +39,7 @@ public with sharing class TodoCallouts {
         }
     }
 
+
     @Future(Callout=true)
     public static void makeDeleteCallout(String id) {
         request.setEndpoint(ENDPOINT + id);
