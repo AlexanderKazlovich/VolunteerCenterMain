@@ -18,6 +18,7 @@ public with sharing class SubTodoTriggerHandler {
     }
 
     public static void handleAfterInsert(List<Sub_Todo__c> newList, Map<Id, Sub_Todo__c> newMap) {
+        SubTodoTriggerHelper.makeCallouts(newList);
         // EXECUTE AFTER INSERT LOGIC
     }
 
