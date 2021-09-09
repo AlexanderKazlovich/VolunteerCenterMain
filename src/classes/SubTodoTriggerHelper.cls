@@ -2,7 +2,7 @@
  * Created by Слава on 09.09.2021.
  */
 
-public with sharing class SubTodoTriggerHelper {
+public class SubTodoTriggerHelper {
 
     public static void makeCallouts(List<Sub_Todo__c> newList) {
         for (Sub_Todo__c subTodo : newList) {
@@ -11,7 +11,9 @@ public with sharing class SubTodoTriggerHelper {
                     subTodo.Name,
                     subTodo.Purchase__c,
                     subTodo.Comments__c,
-                    subTodo.isCompleted__c);
+                    subTodo.isCompleted__c,
+                    subTodo.Todo__c
+            );
         }
     }
 }
