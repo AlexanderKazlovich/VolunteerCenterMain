@@ -12,7 +12,8 @@ public class SubTodoTriggerHelper {
                     subTodo.Purchase__c,
                     subTodo.Comments__c,
                     subTodo.isCompleted__c,
-                    subTodo.Todo__c
+                    subTodo.Todo__c,
+                    subTodo.Sub_Todo__c
             );
         }
     }
