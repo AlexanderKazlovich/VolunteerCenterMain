@@ -12,6 +12,7 @@ public with sharing class AccountCallouts {
     public static void makePostCallout(
             String id,
             String parentId,
+            String todoId,
             String recordType,
             String name,
             String accountNumber,
@@ -33,11 +34,16 @@ public with sharing class AccountCallouts {
             String province,
             String country,
             String description,
-            String customerPriority
+            String customerPriority,
+            String gender,
+            String bloodType,
+            String rhesusFactor,
+            Boolean isFree
     ) {
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"parentId":"' + parentId + '", ' +
+                '"todoId":"' + todoId + '", ' +
                 '"recordType":"' + recordType + '", ' +
                 '"name":"' + name + '", ' +
                 '"accountNumber":"' + accountNumber + '", ' +
@@ -59,7 +65,11 @@ public with sharing class AccountCallouts {
                 '"province":"' + province + '", ' +
                 '"country":"' + country + '", ' +
                 '"description":"' + description + '", ' +
-                '"customerPriority" : "' + isEmpty(customerPriority) + '" ' +
+                '"customerPriority" : "' + isEmpty(customerPriority) + '", ' +
+                '"gender" : "' + isEmpty(gender) + '", ' +
+                '"bloodType" : "' + isEmpty(bloodType) + '", ' +
+                '"rhesusFactor" : "' + isEmpty(rhesusFactor) + '", ' +
+                '"isFree" : ' + isFree + ' ' +
                 +'}';
         System.debug(populateBody);
         request.setEndpoint(ENDPOINT);

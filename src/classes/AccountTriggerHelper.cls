@@ -9,6 +9,7 @@ public with sharing class AccountTriggerHelper {
             AccountCallouts.makePostCallout(
                     account.Id,
                     account.ParentId,
+                    account.Todo__c,
                     account.RecordTypeId,
                     account.Name,
                     account.AccountNumber,
@@ -30,7 +31,11 @@ public with sharing class AccountTriggerHelper {
                     account.BillingState,
                     account.BillingCountry,
                     account.Description,
-                    account.CustomerPriority__c
+                    account.CustomerPriority__c,
+                    account.Gender__c,
+                    account.Blood_Type__c,
+                    account.Rhesus_Factor__c,
+                    account.isFree__c
             );
         }
     }
