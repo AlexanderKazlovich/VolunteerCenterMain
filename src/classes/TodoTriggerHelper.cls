@@ -27,6 +27,7 @@ public with sharing class TodoTriggerHelper {
         for (Todo__c todo : newList) {
             TodoCallouts.makePostCallout(
                     todo.Id,
+                    todo.Account__c,
                     todo.Name,
                     todo.Comments__c,
                     todo.DateTime__c,
@@ -46,6 +47,7 @@ public with sharing class TodoTriggerHelper {
         for (Todo__c todo: newList) {
             TodoCallouts.makePutCallout(
                     todo.Id,
+                    todo.Account__c,
                     todo.Name,
                     todo.Comments__c,
                     todo.DateTime__c,

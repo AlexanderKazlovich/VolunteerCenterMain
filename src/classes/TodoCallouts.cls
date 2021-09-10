@@ -11,6 +11,7 @@ public with sharing class TodoCallouts {
     @Future(Callout=true)
     public static void makePostCallout(
             String id,
+            String accountId,
             String name,
             String comments,
             Datetime thisDateTime,
@@ -20,6 +21,7 @@ public with sharing class TodoCallouts {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
+                '"accountId":"' + accountId + '", ' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
@@ -55,6 +57,7 @@ public with sharing class TodoCallouts {
     @Future(Callout=true)
     public static void makePutCallout(
             String id,
+            String accountId,
             String name,
             String comments,
             Datetime thisDateTime,
@@ -64,6 +67,7 @@ public with sharing class TodoCallouts {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
+                '"accountId":"' + accountId + '", ' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
