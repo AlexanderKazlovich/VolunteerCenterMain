@@ -85,6 +85,19 @@ public with sharing class AccountCallouts {
         }
     }
 
+    @Future(Callout=true)
+    public static void makeDeleteCallout(String id) {
+        request.setEndpoint(ENDPOINT + id);
+        request.setMethod('DELETE');
+        HttpResponse response = http.send(request);
+        if (response.getStatusCode() == 200) {
+            System.debug('Account is deleted');
+        } else {
+            System.debug('The status code returned was not expected: ' +
+                    response.getStatusCode() + ' ' + response.getStatus());
+        }
+    }
+
     private static String isEmpty(String checked) {
 
         return checked = String.isBlank(checked) ? checked = '' : checked;

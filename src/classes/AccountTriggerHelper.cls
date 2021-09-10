@@ -40,4 +40,10 @@ public with sharing class AccountTriggerHelper {
         }
     }
 
+    public static void deleteCallouts(List<Account> oldList) {
+        for (Account account : oldList) {
+            AccountCallouts.makeDeleteCallout(account.Id);
+        }
+    }
+
 }
