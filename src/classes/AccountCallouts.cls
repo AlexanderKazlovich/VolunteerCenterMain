@@ -71,7 +71,6 @@ public with sharing class AccountCallouts {
                 '"rhesusFactor" : "' + isEmpty(rhesusFactor) + '", ' +
                 '"isFree" : ' + isFree + ' ' +
                 +'}';
-        System.debug(populateBody);
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -95,6 +94,80 @@ public with sharing class AccountCallouts {
         } else {
             System.debug('The status code returned was not expected: ' +
                     response.getStatusCode() + ' ' + response.getStatus());
+        }
+    }
+
+    @Future(Callout=true)
+    public static void makePutCallout(
+            String id,
+            String parentId,
+            String todoId,
+            String name,
+            String accountNumber,
+            Decimal age,
+            String accountSite,
+            String phone,
+            String fax,
+            String webSite,
+            Decimal annualRevenue,
+            Integer numberOfEmployees,
+            String type,
+            String industry,
+            String ownerShip,
+            String rating,
+            String active,
+            String street,
+            String city,
+            String postalCode,
+            String province,
+            String country,
+            String description,
+            String customerPriority,
+            String gender,
+            String bloodType,
+            String rhesusFactor,
+            Boolean isFree
+    ) {
+        String populateBody = '{' +
+                '"id":"' + id + '", ' +
+                '"parentId":"' + parentId + '", ' +
+                '"todoId":"' + todoId + '", ' +
+                '"name":"' + name + '", ' +
+                '"accountNumber":"' + accountNumber + '", ' +
+                '"age":' + age + ', ' +
+                '"accountSite":"' + accountSite + '", ' +
+                '"phone":"' + phone + '", ' +
+                '"fax":"' + fax + '", ' +
+                '"webSite":"' + webSite + '", ' +
+                '"annualRevenue":' + annualRevenue + ', ' +
+                '"numberOfEmployees":' + numberOfEmployees + ', ' +
+                '"type" : "' + isEmpty(type) + '", ' +
+                '"industry" : "' + isEmpty(industry) + '", ' +
+                '"ownerShip" : "' + isEmpty(ownerShip) + '", ' +
+                '"rating" : "' + isEmpty(rating) + '", ' +
+                '"active" : "' + isEmpty(active) + '", ' +
+                '"street":"' + street + '", ' +
+                '"city":"' + city + '", ' +
+                '"postalCode":"' + postalCode + '", ' +
+                '"province":"' + province + '", ' +
+                '"country":"' + country + '", ' +
+                '"description":"' + description + '", ' +
+                '"customerPriority" : "' + isEmpty(customerPriority) + '", ' +
+                '"gender" : "' + isEmpty(gender) + '", ' +
+                '"bloodType" : "' + isEmpty(bloodType) + '", ' +
+                '"rhesusFactor" : "' + isEmpty(rhesusFactor) + '", ' +
+                '"isFree" : ' + isFree + ' ' +
+                +'}';
+        request.setEndpoint(ENDPOINT);
+        request.setMethod('PUT');
+        request.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        request.setBody(populateBody);
+        HttpResponse response = http.send(request);
+        if (response.getStatusCode() != 200) {
+            System.debug('The status code returned was not expected: ' +
+                    response.getStatusCode() + ' ' + response.getStatus());
+        } else {
+            System.debug('The Account is changed created with Id ' + response.getBody());
         }
     }
 
