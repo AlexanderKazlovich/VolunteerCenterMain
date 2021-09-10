@@ -23,4 +23,18 @@ public class SubTodoTriggerHelper {
             SubTodoCallouts.makeDeleteCallout(subTodo.Id);
         }
     }
+
+    public static void putCallouts(List<Sub_Todo__c> newList) {
+        for (Sub_Todo__c subTodo : newList) {
+            SubTodoCallouts.makePutCallout(
+                    subTodo.Id,
+                    subTodo.Name,
+                    subTodo.Purchase__c,
+                    subTodo.Comments__c,
+                    subTodo.isCompleted__c,
+                    subTodo.Todo__c,
+                    subTodo.Sub_Todo__c
+            );
+        }
+    }
 }
