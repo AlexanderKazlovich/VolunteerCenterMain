@@ -23,7 +23,7 @@ global class SubTodoManager {
                 Comments__c = isEmpty(comments),
                 isCompleted__c = isCompleted,
                 External_Id__c = id,
-                Todo__c = isNullId(todoId),
+                Todo__c = thisTodoId(todoId),
                 Sub_Todo__c = thisSubTodoId(subTodoId));
 
         insert thisSubTodo;
@@ -63,7 +63,7 @@ global class SubTodoManager {
             thisSubTodo.Purchase__c = isEmpty(purchase);
             thisSubTodo.Comments__c = isEmpty(comments);
             thisSubTodo.isCompleted__c = isCompleted;
-            thisSubTodo.Todo__c = isNullId(todoId);
+            thisSubTodo.Todo__c = thisTodoId(todoId);
             thisSubTodo.Sub_Todo__c = thisSubTodoId(subTodoId);
             update thisSubTodo;
             return thisSubTodo.Id;
@@ -72,7 +72,7 @@ global class SubTodoManager {
             thisSubTodos[0].Purchase__c = isEmpty(purchase);
             thisSubTodos[0].Comments__c = isEmpty(comments);
             thisSubTodos[0].isCompleted__c = isCompleted;
-            thisSubTodos[0].Todo__c = isNullId(todoId);
+            thisSubTodos[0].Todo__c = thisTodoId(todoId);
             thisSubTodos[0].Sub_Todo__c = thisSubTodoId(subTodoId);
             update thisSubTodos[0];
             return thisSubTodos[0].Id;
@@ -83,12 +83,36 @@ global class SubTodoManager {
         return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
     }
 
-    private static String isNullId(String id) {
+//    private static String isNullId(String id) {
+//        if (String.isEmpty(isEmpty(id))) {
+//            return null;
+//        } else {
+//            Todo__c thisTodoId = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
+//            return thisTodoId.Id;
+//        }
+//    }
+
+//    private static String thisSubTodoId(String id) {
+//        if (String.isEmpty(isEmpty(id))) {
+//            return null;
+//        } else {
+//            Sub_Todo__c thisSubTodoId = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
+//            return thisSubTodoId.Id;
+//        }
+//    }
+
+    private static String thisTodoId(String id) {
         if (String.isEmpty(isEmpty(id))) {
             return null;
         } else {
-            Todo__c thisTodoId = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
-            return thisTodoId.Id;
+            List<Todo__c> todosId = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
+            if(todosId.isEmpty()) {
+                return id;
+            } else {
+                return todosId[0].Id;
+            }
+//            System.debug(id);
+//            return  id;
         }
     }
 
@@ -96,8 +120,14 @@ global class SubTodoManager {
         if (String.isEmpty(isEmpty(id))) {
             return null;
         } else {
-            Sub_Todo__c thisSubTodoId = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
-            return thisSubTodoId.Id;
+            List<Sub_Todo__c> subTodosId = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
+            if(subTodosId.isEmpty()) {
+                return id;
+            } else {
+                return subTodosId[0].Id;
+            }
+//            System.debug(id);
+//            return  id;
         }
     }
 }

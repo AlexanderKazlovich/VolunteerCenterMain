@@ -59,9 +59,9 @@ global with sharing class TodoManager {
             String purchase,
             String status) {
 
-        System.debug(accountId);
-        Account accountId23 = [SELECT Id, Name FROM Account WHERE Id = :accountId];
-        System.debug('account' + accountId23);
+//        System.debug(accountId);
+//        Account accountId23 = [SELECT Id, Name FROM Account WHERE Id = :accountId];
+//        System.debug('account' + accountId23);
 
         List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
         if (thisTodos.isEmpty()) {
@@ -99,12 +99,17 @@ global with sharing class TodoManager {
 
     private static String thisAccountId(String id) {
         if (String.isEmpty(isEmpty(id))) {
+            System.debug('done');
             return null;
         } else {
+            System.debug('else');
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
             if (accountsId.isEmpty()) {
+                System.debug(id);
+                System.debug('done2');
                 return id;
             } else {
+                System.debug('done3');
                 return accountsId[0].Id;
             }
         }
