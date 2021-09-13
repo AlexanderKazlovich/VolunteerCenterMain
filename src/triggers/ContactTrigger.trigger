@@ -38,5 +38,4 @@ trigger ContactTrigger on Contact (
     if (Trigger.isAfter && Trigger.isUndelete) {
         ContactTriggerHandler.handleAfterUndelete(Trigger.new, Trigger.newMap);
     }
-
 }

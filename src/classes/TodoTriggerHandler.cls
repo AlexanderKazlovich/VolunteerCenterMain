@@ -29,12 +29,13 @@ public with sharing class TodoTriggerHandler {
     }
 
     public static void handleAfterDelete(List<Todo__c> oldList, Map<Id, Todo__c> oldMap) {
-        TodoTriggerHelper.deleteCallouts(oldList);
+        if(!System.isBatch()){
+            TodoTriggerHelper.deleteCallouts(oldList);
+        }
         // AFTER DELETE LOGIC
     }
 
     public static void handleAfterUndelete(List<Todo__c> newList, Map<Id, Todo__c> newMap) {
         // AFTER UNDELETE LOGIC
     }
-
 }

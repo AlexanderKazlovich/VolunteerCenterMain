@@ -37,9 +37,12 @@ public with sharing class TodoTriggerHelper {
         }
     }
 
+
     public static void deleteCallouts(List<Todo__c> oldList) {
         for (Todo__c todo : oldList) {
-            TodoCallouts.makeDeleteCallout(todo.Id);
+            TodoCallouts.makeDeleteCallout(
+                    todo.Id,
+                    todo.External_Id__c);
         }
     }
 
@@ -47,6 +50,7 @@ public with sharing class TodoTriggerHelper {
         for (Todo__c todo: newList) {
             TodoCallouts.makePutCallout(
                     todo.Id,
+                    todo.External_Id__c,
                     todo.Account__c,
                     todo.Name,
                     todo.Comments__c,

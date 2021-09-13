@@ -38,8 +38,8 @@ public with sharing class AccountCallouts {
             String gender,
             String bloodType,
             String rhesusFactor,
-            Boolean isFree
-    ) {
+            Boolean isFree) {
+
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"parentId":"' + parentId + '", ' +
@@ -69,8 +69,7 @@ public with sharing class AccountCallouts {
                 '"gender" : "' + isEmpty(gender) + '", ' +
                 '"bloodType" : "' + isEmpty(bloodType) + '", ' +
                 '"rhesusFactor" : "' + isEmpty(rhesusFactor) + '", ' +
-                '"isFree" : ' + isFree + ' ' +
-                +'}';
+                '"isFree" : ' + isFree + '}';
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -126,8 +125,7 @@ public with sharing class AccountCallouts {
             String gender,
             String bloodType,
             String rhesusFactor,
-            Boolean isFree
-    ) {
+            Boolean isFree) {
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"parentId":"' + parentId + '", ' +
@@ -156,8 +154,8 @@ public with sharing class AccountCallouts {
                 '"gender" : "' + isEmpty(gender) + '", ' +
                 '"bloodType" : "' + isEmpty(bloodType) + '", ' +
                 '"rhesusFactor" : "' + isEmpty(rhesusFactor) + '", ' +
-                '"isFree" : ' + isFree + ' ' +
-                +'}';
+                '"isFree" : ' + isFree + '}';
+
         request.setEndpoint(ENDPOINT);
         request.setMethod('PUT');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -176,5 +174,4 @@ public with sharing class AccountCallouts {
         return checked = String.isBlank(checked) ? checked = '' : checked;
 
     }
-
 }

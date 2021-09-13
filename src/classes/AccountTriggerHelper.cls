@@ -35,8 +35,7 @@ public with sharing class AccountTriggerHelper {
                     account.Gender__c,
                     account.Blood_Type__c,
                     account.Rhesus_Factor__c,
-                    account.isFree__c
-            );
+                    account.isFree__c);
         }
     }
 
@@ -76,8 +75,7 @@ public with sharing class AccountTriggerHelper {
                     account.Gender__c,
                     account.Blood_Type__c,
                     account.Rhesus_Factor__c,
-                    account.isFree__c
-            );
+                    account.isFree__c);
         }
     }
 }

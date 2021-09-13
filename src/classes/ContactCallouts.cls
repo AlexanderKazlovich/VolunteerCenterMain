@@ -27,8 +27,7 @@ public with sharing class ContactCallouts {
             String postalCode,
             String state,
             String country,
-            String description
-    ) {
+            String description) {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
@@ -48,8 +47,7 @@ public with sharing class ContactCallouts {
                 '"postalCode":"' + postalCode + '", ' +
                 '"state":"' + state + '", ' +
                 '"country":"' + country + '", ' +
-                '"description":"' + description + '" ' +
-                +'}';
+                '"description":"' + description + '"}';
 
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
@@ -96,8 +94,7 @@ public with sharing class ContactCallouts {
             String postalCode,
             String state,
             String country,
-            String description
-    ) {
+            String description) {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
@@ -117,8 +114,7 @@ public with sharing class ContactCallouts {
                 '"postalCode":"' + postalCode + '", ' +
                 '"state":"' + state + '", ' +
                 '"country":"' + country + '", ' +
-                '"description":"' + description + '" ' +
-                +'}';
+                '"description":"' + description + '}';
 
         request.setEndpoint(ENDPOINT);
         request.setMethod('PUT');
@@ -154,5 +150,4 @@ public with sharing class ContactCallouts {
         }
         return dateTimeJson;
     }
-
 }

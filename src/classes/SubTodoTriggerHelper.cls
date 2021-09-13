@@ -13,14 +13,15 @@ public class SubTodoTriggerHelper {
                     subTodo.Comments__c,
                     subTodo.isCompleted__c,
                     subTodo.Todo__c,
-                    subTodo.Sub_Todo__c
-            );
+                    subTodo.Sub_Todo__c);
         }
     }
 
     public static void deleteCallouts(List<Sub_Todo__c> oldList) {
         for (Sub_Todo__c subTodo : oldList) {
-            SubTodoCallouts.makeDeleteCallout(subTodo.Id);
+            SubTodoCallouts.makeDeleteCallout(
+                    subTodo.Id,
+                    subTodo.External_Id__c);
         }
     }
 
@@ -28,13 +29,13 @@ public class SubTodoTriggerHelper {
         for (Sub_Todo__c subTodo : newList) {
             SubTodoCallouts.makePutCallout(
                     subTodo.Id,
+                    subTodo.External_Id__c,
                     subTodo.Name,
                     subTodo.Purchase__c,
                     subTodo.Comments__c,
                     subTodo.isCompleted__c,
                     subTodo.Todo__c,
-                    subTodo.Sub_Todo__c
-            );
+                    subTodo.Sub_Todo__c);
         }
     }
 }

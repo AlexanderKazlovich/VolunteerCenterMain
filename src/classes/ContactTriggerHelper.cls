@@ -24,8 +24,7 @@ public with sharing class ContactTriggerHelper {
                     contact.MailingPostalCode,
                     contact.MailingState,
                     contact.MailingCountry,
-                    contact.Description
-            );
+                    contact.Description);
         }
     }
 
@@ -55,8 +54,7 @@ public with sharing class ContactTriggerHelper {
                     contact.MailingPostalCode,
                     contact.MailingState,
                     contact.MailingCountry,
-                    contact.Description
-            );
+                    contact.Description);
         }
     }
 

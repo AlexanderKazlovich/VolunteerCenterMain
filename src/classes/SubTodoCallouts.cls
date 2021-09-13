@@ -1,34 +1,31 @@
 /**
- * Created by Слава on 07.09.2021.
+ * Created by Слава on 09.09.2021.
  */
 
-public with sharing class TodoCallouts {
+public class SubTodoCallouts {
 
-    private static final String ENDPOINT = 'callout:Connect/services/apexrest/Todo__c/';
+    private static final String ENDPOINT = 'callout:Connect/services/apexrest/Sub_Todo__c/';
     private static Http http = new Http();
     private static HttpRequest request = new HttpRequest();
 
     @Future(Callout=true)
     public static void makePostCallout(
             String id,
-            String accountId,
             String name,
-            String comments,
-            Datetime thisDateTime,
-            String priority,
             String purchase,
-            String status) {
+            String comments,
+            Boolean isCompleted,
+            String todoId,
+            String subTodoId) {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
-                '"accountId":"' + accountId + '", ' +
                 '"name":"' + name + '", ' +
-                '"comments":"' + comments + '", ' +
-                '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
-                '"priority" : "' + isEmpty(priority) + '", ' +
                 '"purchase" : "' + purchase + '", ' +
-                '"status" : "' + isEmpty(status) + '" }';
-
+                '"comments":"' + comments + '", ' +
+                '"isCompleted" : ' + isCompleted + ', ' +
+                '"todoId" : "' + todoId + '", ' +
+                '"subTodoId" : "' + subTodoId + '"}';
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -38,10 +35,9 @@ public with sharing class TodoCallouts {
             System.debug('The status code returned was not expected: ' +
                     response.getStatusCode() + ' ' + response.getStatus());
         } else {
-            System.debug('The Todo is successful created with Id ' + response.getBody());
+            System.debug('The SubTodo is successful created with Id ' + response.getBody());
         }
     }
-
 
     @Future(Callout=true)
     public static void makeDeleteCallout(String id, String externalId) {
@@ -50,6 +46,7 @@ public with sharing class TodoCallouts {
         } else {
             request.setEndpoint(ENDPOINT + id);
         }
+        request.setEndpoint(ENDPOINT + id);
         request.setMethod('DELETE');
         HttpResponse response = http.send(request);
         if (response.getStatusCode() == 200) {
@@ -64,32 +61,22 @@ public with sharing class TodoCallouts {
     public static void makePutCallout(
             String id,
             String externalId,
-            String accountId,
             String name,
-            String comments,
-            Datetime thisDateTime,
-            String priority,
             String purchase,
-            String status) {
-
-        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
-            Account accountIdToSecond = [SELECT Id, External_Id__c FROM Account WHERE Id = :accountId];
-            accountId = accountIdToSecond.External_Id__c;
-            System.debug(accountId);
-        }
+            String comments,
+            Boolean isCompleted,
+            String todoId,
+            String subTodoId) {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"externalId":"' + externalId + '", ' +
-                '"accountId":"' + accountId + '", ' +
                 '"name":"' + name + '", ' +
-                '"comments":"' + comments + '", ' +
-                '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
-                '"priority" : "' + isEmpty(priority) + '", ' +
                 '"purchase" : "' + purchase + '", ' +
-                '"status" : "' + isEmpty(status) + '" }';
-
-
+                '"comments":"' + comments + '", ' +
+                '"isCompleted" : ' + isCompleted + ', ' +
+                '"todoId" : "' + todoId + '", ' +
+                '"subTodoId" : "' + subTodoId + '"}';
         request.setEndpoint(ENDPOINT);
         request.setMethod('PUT');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -99,31 +86,7 @@ public with sharing class TodoCallouts {
             System.debug('The status code returned was not expected: ' +
                     response.getStatusCode() + ' ' + response.getStatus());
         } else {
-            System.debug('The Todo is successful changed with Id ' + response.getBody());
+            System.debug('The SubTodo is successful created with Id ' + response.getBody());
         }
-    }
-
-    private static String handleDateTime(Datetime thisDateTime) {
-
-        String dateSplit;
-        String timeSplit;
-        String dateTimeJson;
-
-        String checkDate = String.valueOfGmt(thisDateTime);
-
-        if (String.isNotBlank(checkDate)) {
-            dateSplit = String.valueOf(thisDateTime.dateGmt());
-            timeSplit = String.valueOf(thisDateTime.timeGmt());
-            dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
-        } else {
-            dateTimeJson = '"1921-01-01T00:00:00.000Z"';
-        }
-        return dateTimeJson;
-    }
-
-    private static String isEmpty(String checked) {
-
-        return checked = String.isBlank(checked) ? checked = '' : checked;
-
     }
 }
