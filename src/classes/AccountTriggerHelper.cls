@@ -41,7 +41,9 @@ public with sharing class AccountTriggerHelper {
 
     public static void deleteCallouts(List<Account> oldList) {
         for (Account account : oldList) {
-            AccountCallouts.makeDeleteCallout(account.Id);
+            AccountCallouts.makeDeleteCallout(
+                    account.Id,
+                    account.External_Id__c);
         }
     }
 
@@ -49,6 +51,7 @@ public with sharing class AccountTriggerHelper {
         for (Account account : newList) {
             AccountCallouts.makePutCallout(
                     account.Id,
+                    account.External_Id__c,
                     account.ParentId,
                     account.Todo__c,
                     account.Name,

@@ -88,7 +88,7 @@ global class SubTodoManager {
             return null;
         } else {
             List<Todo__c> todosId = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
-            if(todosId.isEmpty()) {
+            if (todosId.isEmpty()) {
                 return id;
             } else {
                 return todosId[0].Id;
@@ -101,7 +101,7 @@ global class SubTodoManager {
             return null;
         } else {
             List<Sub_Todo__c> subTodosId = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
-            if(subTodosId.isEmpty()) {
+            if (subTodosId.isEmpty()) {
                 return id;
             } else {
                 return subTodosId[0].Id;

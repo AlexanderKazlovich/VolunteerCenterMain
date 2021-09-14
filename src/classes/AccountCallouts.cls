@@ -13,7 +13,7 @@ public with sharing class AccountCallouts {
             String id,
             String parentId,
             String todoId,
-            String recordType,
+            String recordTypeId,
             String name,
             String accountNumber,
             Decimal age,
@@ -42,9 +42,9 @@ public with sharing class AccountCallouts {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
-                '"parentId":"' + parentId + '", ' +
-                '"todoId":"' + todoId + '", ' +
-                '"recordType":"' + recordType + '", ' +
+                '"parentId":"' + thisParentId(parentId) + '", ' +
+                '"todoId":"' + thisTodoId(todoId) + '", ' +
+                '"recordType":"' + recordTypeName(recordTypeId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"accountNumber":"' + accountNumber + '", ' +
                 '"age":' + age + ', ' +
@@ -84,8 +84,12 @@ public with sharing class AccountCallouts {
     }
 
     @Future(Callout=true)
-    public static void makeDeleteCallout(String id) {
-        request.setEndpoint(ENDPOINT + id);
+    public static void makeDeleteCallout(String id, String externalId) {
+        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
+            request.setEndpoint(ENDPOINT + externalId);
+        } else {
+            request.setEndpoint(ENDPOINT + id);
+        }
         request.setMethod('DELETE');
         HttpResponse response = http.send(request);
         if (response.getStatusCode() == 200) {
@@ -99,6 +103,7 @@ public with sharing class AccountCallouts {
     @Future(Callout=true)
     public static void makePutCallout(
             String id,
+            String externalId,
             String parentId,
             String todoId,
             String name,
@@ -126,10 +131,12 @@ public with sharing class AccountCallouts {
             String bloodType,
             String rhesusFactor,
             Boolean isFree) {
+
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
-                '"parentId":"' + parentId + '", ' +
-                '"todoId":"' + todoId + '", ' +
+                '"externalId":"' + externalId + '", ' +
+                '"parentId":"' + thisParentId(parentId) + '", ' +
+                '"todoId":"' + thisTodoId(todoId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"accountNumber":"' + accountNumber + '", ' +
                 '"age":' + age + ', ' +
@@ -170,8 +177,37 @@ public with sharing class AccountCallouts {
     }
 
     private static String isEmpty(String checked) {
-
         return checked = String.isBlank(checked) ? checked = '' : checked;
+    }
 
+    private static String recordTypeName(String recordTypeId) {
+        RecordType thisRecordType = [SELECT Name FROM RecordType WHERE Id = :recordTypeId];
+        return thisRecordType.Name;
+    }
+
+    private static String thisParentId(String id) {
+        if (String.isEmpty(id)) {
+            return null;
+        } else {
+            Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
+            if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
+                return account.External_Id__c;
+            } else {
+                return account.Id;
+            }
+        }
+    }
+
+    private static String thisTodoId(String id) {
+        if (String.isEmpty(id)) {
+            return null;
+        } else {
+            Todo__c thisTodo = [SELECT Id, External_Id__c FROM Todo__c WHERE Id = :id];
+            if (String.isNotEmpty(thisTodo.Id) && String.isNotEmpty(thisTodo.External_Id__c)) {
+                return thisTodo.External_Id__c;
+            } else {
+                return thisTodo.Id;
+            }
+        }
     }
 }
