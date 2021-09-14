@@ -83,24 +83,6 @@ global class SubTodoManager {
         return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
     }
 
-//    private static String isNullId(String id) {
-//        if (String.isEmpty(isEmpty(id))) {
-//            return null;
-//        } else {
-//            Todo__c thisTodoId = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
-//            return thisTodoId.Id;
-//        }
-//    }
-
-//    private static String thisSubTodoId(String id) {
-//        if (String.isEmpty(isEmpty(id))) {
-//            return null;
-//        } else {
-//            Sub_Todo__c thisSubTodoId = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
-//            return thisSubTodoId.Id;
-//        }
-//    }
-
     private static String thisTodoId(String id) {
         if (String.isEmpty(isEmpty(id))) {
             return null;
@@ -111,8 +93,6 @@ global class SubTodoManager {
             } else {
                 return todosId[0].Id;
             }
-//            System.debug(id);
-//            return  id;
         }
     }
 
@@ -126,8 +106,6 @@ global class SubTodoManager {
             } else {
                 return subTodosId[0].Id;
             }
-//            System.debug(id);
-//            return  id;
         }
     }
 }

@@ -12,6 +12,7 @@ public with sharing class TodoCallouts {
     public static void makePostCallout(
             String id,
             String accountId,
+            String recordTypeId,
             String name,
             String comments,
             Datetime thisDateTime,
@@ -19,18 +20,10 @@ public with sharing class TodoCallouts {
             String purchase,
             String status) {
 
-//        System.debug(accountId);
-//        Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :accountId];
-//        System.debug('id' + account.Id);
-//        System.debug('external' + account.External_Id__c);
-//        if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
-//            accountId = account.External_Id__c;
-//        }
-//        System.debug(accountId);
-
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"accountId":"' + thisAccountId(accountId) + '", ' +
+                '"recordTypeName":"' + recordTypeName(recordTypeId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
@@ -80,21 +73,6 @@ public with sharing class TodoCallouts {
             String priority,
             String purchase,
             String status) {
-
-//        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
-//            Account accountIdToSecond = [SELECT Id, External_Id__c FROM Account WHERE Id = :accountId];
-//            accountId = accountIdToSecond.External_Id__c;
-//            System.debug(accountId);
-//        }
-//
-//        System.debug(accountId);
-//        Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :accountId];
-//        System.debug('id' + account.Id);
-//        System.debug('external' + account.External_Id__c);
-//        if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
-//            accountId = account.External_Id__c;
-//        }
-//        System.debug(accountId);
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
@@ -156,5 +134,10 @@ public with sharing class TodoCallouts {
                 return account.Id;
             }
         }
+    }
+
+    private static String recordTypeName(String recordTypeId) {
+        RecordType thisRecordType = [SELECT Name FROM RecordType WHERE Id = :recordTypeId];
+        return thisRecordType.Name;
     }
 }

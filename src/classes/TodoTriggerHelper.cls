@@ -28,6 +28,7 @@ public with sharing class TodoTriggerHelper {
             TodoCallouts.makePostCallout(
                     todo.Id,
                     todo.Account__c,
+                    todo.RecordTypeId,
                     todo.Name,
                     todo.Comments__c,
                     todo.DateTime__c,

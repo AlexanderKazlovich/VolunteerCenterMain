@@ -12,6 +12,7 @@ global with sharing class TodoManager {
     global static Id createTodo(
             String id,
             String accountId,
+            String recordTypeName,
             String name,
             String comments,
             Datetime thisDateTime,
@@ -22,12 +23,14 @@ global with sharing class TodoManager {
         Todo__c thisTodo = new Todo__c(
                 Name = name,
                 Account__c = thisAccountId(accountId),
+                RecordTypeId = thisRecordType(recordTypeName),
                 Comments__c = isEmpty(comments),
                 DateTime__c = isEmptyDateTime(thisDateTime),
                 Priority__c = priority,
                 Purchase__c = isEmpty(purchase),
                 External_Id__c = id,
                 Status__c = status);
+
         insert thisTodo;
         return thisTodo.Id;
     }
@@ -58,10 +61,6 @@ global with sharing class TodoManager {
             String priority,
             String purchase,
             String status) {
-
-//        System.debug(accountId);
-//        Account accountId23 = [SELECT Id, Name FROM Account WHERE Id = :accountId];
-//        System.debug('account' + accountId23);
 
         List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
         if (thisTodos.isEmpty()) {
@@ -99,19 +98,19 @@ global with sharing class TodoManager {
 
     private static String thisAccountId(String id) {
         if (String.isEmpty(isEmpty(id))) {
-            System.debug('done');
             return null;
         } else {
-            System.debug('else');
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
             if (accountsId.isEmpty()) {
-                System.debug(id);
-                System.debug('done2');
                 return id;
             } else {
-                System.debug('done3');
                 return accountsId[0].Id;
             }
         }
+    }
+
+    private static String thisRecordType(String recordType) {
+        RecordType thisRecordType  = [SELECT Id FROM RecordType WHERE RecordType.Name = :recordType];
+        return thisRecordType.Id;
     }
 }
