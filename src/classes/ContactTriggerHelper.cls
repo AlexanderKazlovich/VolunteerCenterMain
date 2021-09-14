@@ -30,7 +30,9 @@ public with sharing class ContactTriggerHelper {
 
     public static void deleteCallouts(List<Contact> oldList) {
         for (Contact contact : oldList) {
-            ContactCallouts.makeDeleteCallout(contact.Id);
+            ContactCallouts.makeDeleteCallout(
+                    contact.Id,
+                    contact.External_Id__c);
         }
     }
 
@@ -38,6 +40,7 @@ public with sharing class ContactTriggerHelper {
         for (Contact contact : newList) {
             ContactCallouts.makePutCallout(
                     contact.Id,
+                    contact.External_Id__c,
                     contact.FirstName,
                     contact.Salutation,
                     contact.LastName,
@@ -57,5 +60,4 @@ public with sharing class ContactTriggerHelper {
                     contact.Description);
         }
     }
-
 }

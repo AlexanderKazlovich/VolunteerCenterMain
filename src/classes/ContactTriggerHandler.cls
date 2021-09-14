@@ -35,5 +35,4 @@ public with sharing class ContactTriggerHandler {
     public static void handleAfterUndelete(List<Contact> newList, Map<Id, Contact> newMap) {
         // AFTER UNDELETE LOGIC
     }
-
 }

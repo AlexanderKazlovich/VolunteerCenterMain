@@ -34,7 +34,7 @@ public with sharing class ContactCallouts {
                 '"salutation":"' + isEmpty(salutation) + '", ' +
                 '"firstName":"' + firstName + '", ' +
                 '"lastName":"' + lastName + '", ' +
-                '"accountId":"' + accountId + '", ' +
+                '"accountId":"' + thisAccountId(accountId) + '", ' +
                 '"title":"' + title + '", ' +
                 '"department":"' + department + '", ' +
                 '"birthdate": ' + handleDate(birthdate) + ', ' +
@@ -63,8 +63,12 @@ public with sharing class ContactCallouts {
     }
 
     @Future(Callout=true)
-    public static void makeDeleteCallout(String id) {
-        request.setEndpoint(ENDPOINT + id);
+    public static void makeDeleteCallout(String id, String externalId) {
+        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
+            request.setEndpoint(ENDPOINT + externalId);
+        } else {
+            request.setEndpoint(ENDPOINT + id);
+        }
         request.setMethod('DELETE');
         HttpResponse response = http.send(request);
         if (response.getStatusCode() == 200) {
@@ -78,6 +82,7 @@ public with sharing class ContactCallouts {
     @Future(Callout=true)
     public static void makePutCallout(
             String id,
+            String externalId,
             String salutation,
             String firstName,
             String lastName,
@@ -98,10 +103,11 @@ public with sharing class ContactCallouts {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
+                '"externalId":"' + externalId + '", ' +
                 '"salutation":"' + isEmpty(salutation) + '", ' +
                 '"firstName":"' + firstName + '", ' +
                 '"lastName":"' + lastName + '", ' +
-                '"accountId":"' + accountId + '", ' +
+                '"accountId":"' + thisAccountId(accountId) + '", ' +
                 '"title":"' + title + '", ' +
                 '"department":"' + department + '", ' +
                 '"birthdate": ' + handleDate(birthdate) + ', ' +
@@ -114,7 +120,7 @@ public with sharing class ContactCallouts {
                 '"postalCode":"' + postalCode + '", ' +
                 '"state":"' + state + '", ' +
                 '"country":"' + country + '", ' +
-                '"description":"' + description + '}';
+                '"description":"' + description + '"}';
 
         request.setEndpoint(ENDPOINT);
         request.setMethod('PUT');
@@ -149,5 +155,18 @@ public with sharing class ContactCallouts {
             dateTimeJson = '"1921-01-01"';
         }
         return dateTimeJson;
+    }
+
+    private static String thisAccountId(String id) {
+        if (String.isEmpty(id)) {
+            return null;
+        } else {
+            Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
+            if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
+                return account.External_Id__c;
+            } else {
+                return account.Id;
+            }
+        }
     }
 }

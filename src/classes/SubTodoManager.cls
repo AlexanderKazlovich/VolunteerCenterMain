@@ -38,8 +38,8 @@ global class SubTodoManager {
         );
         List<Sub_Todo__c> thisSubTodos = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :subTodoId];
         if (thisSubTodos.isEmpty()) {
-            Todo__c thisTodo = [SELECT Id FROM Todo__c WHERE Id = :subTodoId];
-            delete thisSubTodos;
+            Sub_Todo__c thisSubTodo = [SELECT Id FROM Sub_Todo__c WHERE Id = :subTodoId];
+            delete thisSubTodo;
         } else {
             delete thisSubTodos;
         }

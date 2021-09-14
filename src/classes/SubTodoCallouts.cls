@@ -46,7 +46,6 @@ public class SubTodoCallouts {
         } else {
             request.setEndpoint(ENDPOINT + id);
         }
-        request.setEndpoint(ENDPOINT + id);
         request.setMethod('DELETE');
         HttpResponse response = http.send(request);
         if (response.getStatusCode() == 200) {
