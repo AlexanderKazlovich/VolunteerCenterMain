@@ -2,30 +2,40 @@
  * Created by Programming on 06.09.2021.
  */
 
-trigger TodoTrigger on Todo__c (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+trigger TodoTrigger on Todo__c (
+        before insert,
+        before update,
+        before delete,
+        after insert,
+        after update,
+        after delete,
+        after undelete) {
 
-    TodoTriggerHandler handler = new TodoTriggerHandler();
+    if (Trigger.isBefore && Trigger.isInsert) {
+        TodoTriggerHandler.handleBeforeInsert(Trigger.new);
+    }
 
-    if(Trigger.isBefore && Trigger.isInsert){
-        handler.onBeforeInsert();
+    if (Trigger.isBefore && Trigger.isUpdate) {
+        TodoTriggerHandler.handleBeforeUpdate(Trigger.old, Trigger.new, Trigger.newMap, Trigger.oldMap);
     }
-    if(Trigger.isAfter && Trigger.isInsert){
-        handler.onAfterInsert();
-    }
-    if(Trigger.isBefore && Trigger.isUpdate){
-        handler.onBeforeUpdate();
-    }
-    if (Trigger.isAfter && Trigger.isUpdate) {
-        handler.onAfterUpdate();
-    }
+
     if (Trigger.isBefore && Trigger.isDelete) {
-        handler.onBeforeDelete();
-    }
-    if (Trigger.isAfter && Trigger.isDelete) {
-        handler.onAfterDelete();
-    }
-    if (Trigger.isUndelete) {
-        handler.onUndelete();
+        TodoTriggerHandler.handleBeforeDelete(Trigger.old, Trigger.oldMap);
     }
 
+    if (Trigger.isAfter && Trigger.isInsert) {
+        TodoTriggerHandler.handleAfterInsert(Trigger.new, Trigger.newMap);
+    }
+
+    if (Trigger.isAfter && Trigger.isUpdate) {
+        TodoTriggerHandler.handleAfterUpdate(Trigger.old, Trigger.new, Trigger.newMap, Trigger.oldMap);
+    }
+
+    if (Trigger.isAfter && Trigger.isDelete) {
+        TodoTriggerHandler.handleAfterDelete(Trigger.old, Trigger.oldMap);
+    }
+
+    if (Trigger.isAfter && Trigger.isUndelete) {
+        TodoTriggerHandler.handleAfterUndelete(Trigger.new, Trigger.newMap);
+    }
 }
