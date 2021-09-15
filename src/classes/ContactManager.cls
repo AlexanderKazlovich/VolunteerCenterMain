@@ -136,7 +136,7 @@ global with sharing class ContactManager {
     }
 
     private static String isEmpty(String checkEntity) {
-        return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
+        return checkEntity.equalsIgnoreCase(CHECK_NULL) ? null : checkEntity;
     }
 
     private static String thisAccountId(String id) {
@@ -154,6 +154,6 @@ global with sharing class ContactManager {
 
     private static Date thisDate(Date checkEntity) {
         String checkThisDateTime = String.valueOfGmt(checkEntity);
-        return checkEntity = checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? checkEntity = null : checkEntity;
+        return checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? null : checkEntity;
     }
 }
