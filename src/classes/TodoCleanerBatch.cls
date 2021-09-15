@@ -5,8 +5,8 @@
 public with sharing class TodoCleanerBatch implements Database.Batchable<sObject>{
 
     public Database.QueryLocator start(Database.BatchableContext bc){
-        Decimal months = [SELECT Count_of_months__c FROM Batch_Settings__mdt WHERE DeveloperName='Delete_todos' LIMIT 1].get(0).Count_of_months__c;
-        Date compareDate = System.today().addMonths(-3);
+        Batch_Settings__mdt setting = Batch_Settings__mdt.getInstance('Delete_todos');
+        Date compareDate = System.today().addMonths(0 - setting.Count_of_months__c.intValue());
         return Database.getQueryLocator('SELECT Id FROM Todo__c WHERE CreatedDate <  :compareDate');
     }
 

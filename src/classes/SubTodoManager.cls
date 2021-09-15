@@ -56,9 +56,8 @@ global class SubTodoManager {
             String todoId,
             String subTodoId) {
 
-        List<Sub_Todo__c> thisSubTodos = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
-        if (thisSubTodos.isEmpty()) {
-            Sub_Todo__c thisSubTodo = [SELECT Id FROM Sub_Todo__c WHERE Id = :externalId];
+        if (String.isEmpty(isEmpty(externalId))) {
+            Sub_Todo__c thisSubTodo = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
             thisSubTodo.Name = name;
             thisSubTodo.Purchase__c = isEmpty(purchase);
             thisSubTodo.Comments__c = isEmpty(comments);
@@ -68,19 +67,20 @@ global class SubTodoManager {
             update thisSubTodo;
             return thisSubTodo.Id;
         } else {
-            thisSubTodos[0].Name = name;
-            thisSubTodos[0].Purchase__c = isEmpty(purchase);
-            thisSubTodos[0].Comments__c = isEmpty(comments);
-            thisSubTodos[0].isCompleted__c = isCompleted;
-            thisSubTodos[0].Todo__c = thisTodoId(todoId);
-            thisSubTodos[0].Sub_Todo__c = thisSubTodoId(subTodoId);
-            update thisSubTodos[0];
-            return thisSubTodos[0].Id;
+            Sub_Todo__c thisSubTodo = [SELECT Id FROM Sub_Todo__c WHERE Id = :externalId];
+            thisSubTodo.Name = name;
+            thisSubTodo.Purchase__c = isEmpty(purchase);
+            thisSubTodo.Comments__c = isEmpty(comments);
+            thisSubTodo.isCompleted__c = isCompleted;
+            thisSubTodo.Todo__c = thisTodoId(todoId);
+            thisSubTodo.Sub_Todo__c = thisSubTodoId(subTodoId);
+            update thisSubTodo;
+            return thisSubTodo.Id;
         }
     }
 
     private static String isEmpty(String checkEntity) {
-        return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
+        return checkEntity.equalsIgnoreCase(CHECK_NULL) ? null : checkEntity;
     }
 
     private static String thisTodoId(String id) {

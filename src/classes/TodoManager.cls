@@ -62,9 +62,8 @@ global with sharing class TodoManager {
             String purchase,
             String status) {
 
-        List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
-        if (thisTodos.isEmpty()) {
-            Todo__c thisTodo = [SELECT Id FROM Todo__c WHERE Id = :externalId];
+        if (String.isEmpty(isEmpty(externalId))) {
+            Todo__c thisTodo = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
             thisTodo.Name = name;
             thisTodo.Account__c = thisAccountId(accountId);
             thisTodo.Comments__c = isEmpty(comments);
@@ -75,25 +74,26 @@ global with sharing class TodoManager {
             update thisTodo;
             return thisTodo.Id;
         } else {
-            thisTodos[0].Name = name;
-            thisTodos[0].Account__c = thisAccountId(accountId);
-            thisTodos[0].Comments__c = isEmpty(comments);
-            thisTodos[0].DateTime__c = isEmptyDateTime(thisDateTime);
-            thisTodos[0].Priority__c = priority;
-            thisTodos[0].Purchase__c = isEmpty(purchase);
-            thisTodos[0].Status__c = status;
-            update thisTodos;
-            return thisTodos[0].Id;
+            Todo__c thisTodo = [SELECT Id FROM Todo__c WHERE Id = :externalId];
+            thisTodo.Name = name;
+            thisTodo.Account__c = thisAccountId(accountId);
+            thisTodo.Comments__c = isEmpty(comments);
+            thisTodo.DateTime__c = isEmptyDateTime(thisDateTime);
+            thisTodo.Priority__c = priority;
+            thisTodo.Purchase__c = isEmpty(purchase);
+            thisTodo.Status__c = status;
+            update thisTodo;
+            return thisTodo.Id;
         }
     }
 
     private static String isEmpty(String checkEntity) {
-        return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
+        return checkEntity.equalsIgnoreCase(CHECK_NULL) ? null : checkEntity;
     }
 
     private static Datetime isEmptyDateTime(Datetime checkEntity) {
         String checkThisDateTime = String.valueOfGmt(checkEntity);
-        return checkEntity = checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? checkEntity = null : checkEntity;
+        return checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? null : checkEntity;
     }
 
     private static String thisAccountId(String id) {
@@ -110,7 +110,6 @@ global with sharing class TodoManager {
     }
 
     private static String thisRecordType(String recordType) {
-        RecordType thisRecordType  = [SELECT Id FROM RecordType WHERE RecordType.Name = :recordType];
-        return thisRecordType.Id;
+        return [SELECT Id FROM RecordType WHERE RecordType.Name = :recordType].get(0).Id;
     }
 }
