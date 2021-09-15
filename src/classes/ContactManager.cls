@@ -90,9 +90,8 @@ global with sharing class ContactManager {
             String country,
             String description) {
 
-        List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :id];
-        if (thisContacts.isEmpty()) {
-            Contact thisContact = [SELECT Id FROM Contact WHERE Id = :externalId];
+        if(String.isEmpty(isEmpty(externalId))) {
+            Contact thisContact = [SELECT Id FROM Contact WHERE External_Id__c = :id];
             thisContact.Salutation = salutation;
             thisContact.FirstName = isEmpty(firstName);
             thisContact.LastName = isEmpty(lastName);
@@ -113,25 +112,26 @@ global with sharing class ContactManager {
             update thisContact;
             return thisContact.Id;
         } else {
-            thisContacts[0].Salutation = salutation;
-            thisContacts[0].FirstName = isEmpty(firstName);
-            thisContacts[0].LastName = isEmpty(lastName);
-            thisContacts[0].AccountId = thisAccountId(accountId);
-            thisContacts[0].Title = isEmpty(title);
-            thisContacts[0].Department = isEmpty(department);
-            thisContacts[0].Birthdate = thisDate(birthdate);
-            thisContacts[0].Phone = isEmpty(phone);
-            thisContacts[0].MobilePhone = isEmpty(mobile);
-            thisContacts[0].Fax = isEmpty(fax);
-            thisContacts[0].Email = isEmpty(email);
-            thisContacts[0].MailingStreet = isEmpty(street);
-            thisContacts[0].MailingCity = isEmpty(city);
-            thisContacts[0].MailingPostalCode = isEmpty(postalCode);
-            thisContacts[0].MailingState = isEmpty(state);
-            thisContacts[0].MailingCountry = isEmpty(country);
-            thisContacts[0].Description = isEmpty(description);
-            update thisContacts[0];
-            return thisContacts[0].Id;
+            Contact thisContact = [SELECT Id FROM Contact WHERE Id = :externalId];
+            thisContact.Salutation = salutation;
+            thisContact.FirstName = isEmpty(firstName);
+            thisContact.LastName = isEmpty(lastName);
+            thisContact.AccountId = thisAccountId(accountId);
+            thisContact.Title = isEmpty(title);
+            thisContact.Department = isEmpty(department);
+            thisContact.Birthdate = thisDate(birthdate);
+            thisContact.Phone = isEmpty(phone);
+            thisContact.MobilePhone = isEmpty(mobile);
+            thisContact.Fax = isEmpty(fax);
+            thisContact.Email = isEmpty(email);
+            thisContact.MailingStreet = isEmpty(street);
+            thisContact.MailingCity = isEmpty(city);
+            thisContact.MailingPostalCode = isEmpty(postalCode);
+            thisContact.MailingState = isEmpty(state);
+            thisContact.MailingCountry = isEmpty(country);
+            thisContact.Description = isEmpty(description);
+            update thisContact;
+            return thisContact.Id;
         }
     }
 

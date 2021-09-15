@@ -4,195 +4,153 @@
 
 @IsTest
 public class ContactManagerTest {
-//
-//    @IsTest
-//    static void testCreateContact() {
-//        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
-//        Id thisContactId = ContactManager.createContact(
-//                '45fds4578956424789',
-//                '',
-//                'null',
-//                'null',
-//                '',
-//                'null',
-//                'null',
-//                '1921-01-01 00:00:00',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null');
-//        System.assert(thisAccountId != null);
-//        Account thisAccount = [SELECT Id, Name FROM Account WHERE Id = :thisAccountId];
-//        System.assert(thisAccount != null);
-//        System.assertEquals(thisAccount.Name, 'Groom');
-//    }
-//
-//    @IsTest
-//    static void testDeleteAccount() {
-//        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
-//        Account account = new Account(Name = 'Fav');
-//        insert account;
-//        System.debug(account.Id);
-//        RestRequest request = new RestRequest();
-//        request.requestURI = 'https://yourInstance.my.salesforce.com/services/apexrest/Cases/' + account.Id;
-//        request.httpMethod = 'DELETE';
-//        RestContext.request = request;
-//        AccountManager.deleteAccount();
-//        List<Account> accounts = [SELECT Id FROM Account WHERE Id = :account.Id];
-//        System.assert(accounts.size() == 0);
-//    }
-//
-//    @IsTest
-//    static void testUpdateAccount() {
-//        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
-//        Id accountFirstId = AccountManager.createAccount(
-//                '45fds4578956424789',
-//                '',
-//                '',
-//                'Company',
-//                'Groom',
-//                'null',
-//                null,
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                true);
-//        System.assert(accountFirstId != null);
-//        Account accountFirst = [SELECT Id, Name FROM Account WHERE Id = :accountFirstId];
-//        System.assert(accountFirst != null);
-//        System.assertEquals(accountFirst.Name, 'Groom');
-//        Id accountSecondId = AccountManager.updateAccount(
-//                '45fds4578956424789',
-//                accountFirstId,
-//                '',
-//                '',
-//                'Groom',
-//                'null',
-//                null,
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                'null',
-//                'Brest',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                true);
-//        System.assertEquals(accountFirstId, accountSecondId);
-//        Account accountSecond = [SELECT Id, BillingCity FROM Account WHERE Id = :accountSecondId];
-//        System.assert(accountSecond != null);
-//        System.assertEquals(accountSecond.BillingCity, 'Brest');
-//    }
-//
-//    @IsTest
-//    static void testUpdateAccountSecond() {
-//        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
-//        Id accountFirstId = AccountManager.createAccount(
-//                '45fds4578956424789',
-//                '',
-//                '',
-//                'Company',
-//                'Groom',
-//                'null',
-//                null,
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                true);
-//        System.assert(accountFirstId != null);
-//        Account accountFirst = [SELECT Id, Name FROM Account WHERE Id = :accountFirstId];
-//        System.assert(accountFirst != null);
-//        System.assertEquals(accountFirst.Name, 'Groom');
-//        Id accountSecondId = AccountManager.updateAccount(
-//                '45fds4578956424789',
-//                'null',
-//                '',
-//                '',
-//                'Groom',
-//                'null',
-//                null,
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                'null',
-//                'Brest',
-//                'null',
-//                'null',
-//                'null',
-//                'null',
-//                null,
-//                null,
-//                null,
-//                null,
-//                true);
-//        System.assertEquals(accountFirstId, accountSecondId);
-//        System.debug(accountFirstId);
-//        System.debug(accountSecondId);
-//        Account accountSecond = [SELECT Id, BillingCity FROM Account WHERE Id = :accountSecondId];
-//        System.assert(accountSecond != null);
-//        System.assertEquals(accountSecond.BillingCity, 'Brest');
-//    }
+
+    @IsTest
+    static void testCreateContact() {
+        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
+        Date thisDate = Date.newInstance(2022, 2, 17);
+        Id thisContactId = ContactManager.createContact(
+                '45fds4578956424789',
+                '',
+                'null',
+                'Groom',
+                '',
+                'null',
+                'null',
+                thisDate,
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null');
+        System.assert(thisContactId != null);
+        Contact thisContact = [SELECT Id, Name FROM Contact WHERE Id = :thisContactId];
+        System.assert(thisContact != null);
+        System.assertEquals(thisContact.Name, 'Groom');
+    }
+
+    @IsTest
+    static void testDeleteContact() {
+        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
+        Contact contact = new Contact(LastName = 'Fav');
+        insert contact;
+        RestRequest request = new RestRequest();
+        request.requestURI = 'https://yourInstance.my.salesforce.com/services/apexrest/Contacts/' + contact.Id;
+        request.httpMethod = 'DELETE';
+        RestContext.request = request;
+        ContactManager.deleteContact();
+        List<Contact> contacts = [SELECT Id FROM Contact WHERE Id = :contact.Id];
+        System.assert(contacts.size() == 0);
+    }
+
+    @IsTest
+    static void testUpdateContact() {
+        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
+        Date thisDate = Date.newInstance(2022, 2, 17);
+        Id contactFirstId = ContactManager.createContact(
+                '45fds4578956424789',
+                '',
+                'null',
+                'Groom',
+                '',
+                'null',
+                'null',
+                thisDate,
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null');
+        System.assert(contactFirstId != null);
+        Contact contactFirst = [SELECT Id, LastName FROM Contact WHERE Id = :contactFirstId];
+        System.assert(contactFirst != null);
+        System.assertEquals(contactFirst.LastName, 'Groom');
+        Id contactSecondId = ContactManager.updateContact(
+                '45fds4578956424789',
+                contactFirstId,
+                '',
+                'null',
+                'Groom',
+                '',
+                'null',
+                'null',
+                thisDate,
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'Brest',
+                'null',
+                'null',
+                'null',
+                'null');
+        System.assertEquals(contactFirstId, contactSecondId);
+        Contact contactSecond = [SELECT Id, MailingCity FROM Contact WHERE Id = :contactSecondId];
+        System.assert(contactSecondId != null);
+        System.assertEquals(contactSecond.MailingCity, 'Brest');
+    }
+
+    @IsTest
+    static void testUpdateContactSecond() {
+        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
+        Date thisDate = Date.newInstance(2022, 2, 17);
+        Id contactFirstId = ContactManager.createContact(
+                '45fds4578956424789',
+                '',
+                'null',
+                'Groom',
+                '',
+                'null',
+                'null',
+                thisDate,
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'null');
+        System.assert(contactFirstId != null);
+        Contact contactFirst = [SELECT Id, LastName FROM Contact WHERE Id = :contactFirstId];
+        System.assert(contactFirst != null);
+        System.assertEquals(contactFirst.LastName, 'Groom');
+        Id contactSecondId = ContactManager.updateContact(
+                '45fds4578956424789',
+                '',
+                '',
+                'null',
+                'Groom',
+                '',
+                'null',
+                'null',
+                thisDate,
+                'null',
+                'null',
+                'null',
+                'null',
+                'null',
+                'Brest',
+                'null',
+                'null',
+                'null',
+                'null');
+        System.assertEquals(contactFirstId, contactSecondId);
+        Contact contactSecond = [SELECT Id, MailingCity FROM Contact WHERE Id = :contactSecondId];
+        System.assert(contactSecondId != null);
+        System.assertEquals(contactSecond.MailingCity, 'Brest');
+    }
 }

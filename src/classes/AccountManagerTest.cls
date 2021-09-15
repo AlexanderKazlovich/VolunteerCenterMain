@@ -51,7 +51,7 @@ private class AccountManagerTest {
         insert account;
         System.debug(account.Id);
         RestRequest request = new RestRequest();
-        request.requestURI = 'https://yourInstance.my.salesforce.com/services/apexrest/Cases/' + account.Id;
+        request.requestURI = 'https://yourInstance.my.salesforce.com/services/apexrest/Acounts/' + account.Id;
         request.httpMethod = 'DELETE';
         RestContext.request = request;
         AccountManager.deleteAccount();
