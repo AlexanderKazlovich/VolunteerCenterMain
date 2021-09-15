@@ -21,8 +21,4 @@ public with sharing class VolunteerManager {
         @InvocableVariable
         public List<Account> volunteers;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> ConnectSecondOrg
 }
