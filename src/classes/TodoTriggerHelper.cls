@@ -23,7 +23,6 @@ public with sharing class TodoTriggerHelper {
         }
     }
 
-
     public static Id getQueueId(String recordTypeName) {
         return [SELECT Id FROM Group WHERE Type='Queue' AND DeveloperName = :recordTypeName].get(0).Id;
     }

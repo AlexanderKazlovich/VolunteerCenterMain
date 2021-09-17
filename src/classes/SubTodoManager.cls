@@ -25,7 +25,7 @@ global class SubTodoManager {
                 External_Id__c = id,
                 Todo__c = thisTodoId(todoId),
                 Sub_Todo__c = thisSubTodoId(subTodoId));
-
+        SubTodoTriggerHandler.isDisabledForCallouts = true;
         insert thisSubTodo;
         return thisSubTodo.Id;
     }
@@ -37,6 +37,7 @@ global class SubTodoManager {
                 request.requestURI.lastIndexOf('/') + 1
         );
         List<Sub_Todo__c> thisSubTodos = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :subTodoId];
+        SubTodoTriggerHandler.isDisabledForCallouts = true;
         if (thisSubTodos.isEmpty()) {
             Sub_Todo__c thisSubTodo = [SELECT Id FROM Sub_Todo__c WHERE Id = :subTodoId];
             delete thisSubTodo;
@@ -56,6 +57,7 @@ global class SubTodoManager {
             String todoId,
             String subTodoId) {
 
+        SubTodoTriggerHandler.isDisabledForCallouts = true;
         if (String.isEmpty(isEmpty(externalId))) {
             Sub_Todo__c thisSubTodo = [SELECT Id FROM Sub_Todo__c WHERE External_Id__c = :id];
             thisSubTodo.Name = name;

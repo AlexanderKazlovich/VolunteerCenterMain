@@ -70,6 +70,7 @@ global with sharing class AccountManager {
                 Rhesus_Factor__c = rhesusFactor,
                 IsFree__c = isFree);
 
+        AccountTriggerHandler.isDisabledForCallouts = true;
         insert thisAccount;
         return thisAccount.Id;
     }
@@ -82,6 +83,7 @@ global with sharing class AccountManager {
                 request.requestURI.lastIndexOf('/') + 1
         );
         List<Account> thisAccounts = [SELECT Id FROM Account WHERE External_Id__c = :accountId];
+        AccountTriggerHandler.isDisabledForCallouts = true;
         if (thisAccounts.isEmpty()) {
             Account thisAccount = [SELECT Id FROM Account WHERE Id = :accountId];
             delete thisAccount;
@@ -122,6 +124,7 @@ global with sharing class AccountManager {
             String rhesusFactor,
             Boolean isFree) {
 
+        AccountTriggerHandler.isDisabledForCallouts = true;
         if(String.isEmpty(isEmpty(externalId))) {
             Account thisAccount = [SELECT Id FROM Account WHERE External_Id__c = :id];
             thisAccount.ParentId = thisParentId(parentId);

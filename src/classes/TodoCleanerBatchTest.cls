@@ -5,8 +5,6 @@
 private with sharing class TodoCleanerBatchTest {
     @IsTest
     private static void deleteTodosTest(){
-
-
         Todo__c todo1 = new Todo__c(Name='test1');
         Todo__c todo2 = new Todo__c(Name='test2');
 
@@ -22,10 +20,8 @@ private with sharing class TodoCleanerBatchTest {
             Database.executeBatch(new TodoCleanerBatch());
         Test.stopTest();
 
-
         System.assertEquals(0, [SELECT Name FROM Todo__c WHERE Name='test1'].size());
         System.assertEquals(1, [SELECT Name FROM Todo__c WHERE Name='test2'].size());
-
     }
 
 }

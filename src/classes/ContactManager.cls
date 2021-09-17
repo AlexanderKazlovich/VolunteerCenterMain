@@ -49,6 +49,7 @@ global with sharing class ContactManager {
                 MailingCountry = isEmpty(country),
                 Description = isEmpty(description));
 
+        ContactTriggerHandler.isDisabledForCallouts = true;
         insert thisContact;
         return thisContact.Id;
     }
@@ -60,6 +61,7 @@ global with sharing class ContactManager {
                 request.requestURI.lastIndexOf('/') + 1
         );
         List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :contactId];
+        ContactTriggerHandler.isDisabledForCallouts = true;
         if (thisContacts.isEmpty()) {
             Contact thisContact = [SELECT Id FROM Contact WHERE Id = :contactId];
             delete thisContact;
@@ -90,6 +92,7 @@ global with sharing class ContactManager {
             String country,
             String description) {
 
+        ContactTriggerHandler.isDisabledForCallouts = true;
         if(String.isEmpty(isEmpty(externalId))) {
             Contact thisContact = [SELECT Id FROM Contact WHERE External_Id__c = :id];
             thisContact.Salutation = salutation;

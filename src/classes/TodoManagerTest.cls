@@ -3,7 +3,7 @@
  */
 
 @IsTest
-public class TodoManagerTest {
+private class TodoManagerTest {
 
     @IsTest
     static void testCreateTodo() {
