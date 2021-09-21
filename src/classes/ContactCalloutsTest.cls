@@ -42,10 +42,10 @@ public class ContactCalloutsTest {
 
         Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
 
+        Test.startTest();
+
         Contact contact = new Contact(LastName = 'Ivanov');
         insert contact;
-
-        Test.startTest();
 
         contact.LastName = 'Locky';
         update contact;

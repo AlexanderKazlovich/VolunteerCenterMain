@@ -72,38 +72,4 @@ public class TodoManagerTest {
         System.assert(todoSecondId != null);
         System.assertEquals(todoSecond.Comments__c, 'Good');
     }
-
-    @IsTest
-    static void testUpdateTodoSecond() {
-        Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
-        Datetime thisDateTime = Datetime.newInstance(2021, 2, 17, 22, 00, 00);
-        Id todoId = TodoManager.createTodo(
-                '45fds4578956424789',
-                '',
-                'Physical Help',
-                'Make',
-                'null',
-                thisDateTime,
-                '',
-                'null',
-                '');
-        System.assert(todoId != null);
-        Todo__c thisTodo = [SELECT Id, Name FROM Todo__c WHERE Id = :todoId];
-        System.assert(thisTodo != null);
-        System.assertEquals(thisTodo.Name, 'Make');
-        Id todoSecondId = TodoManager.updateTodo(
-                '45fds4578956424789',
-                '',
-                '',
-                'Make',
-                'Good',
-                thisDateTime,
-                '',
-                'null',
-                '');
-        System.assertEquals(todoId, todoSecondId);
-        Todo__c todoSecond = [SELECT Id, Comments__c FROM Todo__c WHERE Id = :todoSecondId];
-        System.assert(todoSecondId != null);
-        System.assertEquals(todoSecond.Comments__c, 'Good');
-    }
 }

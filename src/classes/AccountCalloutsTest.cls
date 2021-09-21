@@ -42,10 +42,10 @@ public class AccountCalloutsTest {
 
         Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
 
+        Test.startTest();
+
         Account account = new Account(Name = 'React');
         insert account;
-
-        Test.startTest();
 
         account.Name = 'Locky';
         update account;

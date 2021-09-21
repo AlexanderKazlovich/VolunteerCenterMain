@@ -4,6 +4,8 @@
 
 public with sharing class ContactTriggerHandler {
 
+    public static Boolean isDisabledForCallouts = false;
+
     public static void handleBeforeInsert(List<Contact> newList) {
         // EXECUTE BEFORE INSERT LOGIC
     }
@@ -18,18 +20,24 @@ public with sharing class ContactTriggerHandler {
     }
 
     public static void handleAfterInsert(List<Contact> newList, Map<Id, Contact> newMap) {
-        ContactTriggerHelper.makeCallouts(newList);
-        // EXECUTE AFTER INSERT LOGIC
+        if (!isDisabledForCallouts) {
+            ContactTriggerHelper.makeCallouts(newList);
+            // EXECUTE AFTER INSERT LOGIC
+        }
     }
 
     public static void handleAfterUpdate(List<Contact> oldList, List<Contact> newList, Map<Id, Contact> newMap, Map<Id, Contact> oldMap) {
-        ContactTriggerHelper.putCallouts(newList);
-        // AFTER UPDATE LOGIC
+        if (!isDisabledForCallouts) {
+            ContactTriggerHelper.putCallouts(newList);
+            // AFTER UPDATE LOGIC
+        }
     }
 
     public static void handleAfterDelete(List<Contact> oldList, Map<Id, Contact> oldMap) {
-        ContactTriggerHelper.deleteCallouts(oldList);
-        // AFTER DELETE LOGIC
+        if (!isDisabledForCallouts) {
+            ContactTriggerHelper.deleteCallouts(oldList);
+            // AFTER DELETE LOGIC
+        }
     }
 
     public static void handleAfterUndelete(List<Contact> newList, Map<Id, Contact> newMap) {

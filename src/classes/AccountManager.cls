@@ -70,6 +70,7 @@ global with sharing class AccountManager {
                 Rhesus_Factor__c = rhesusFactor,
                 IsFree__c = isFree);
 
+        AccountTriggerHandler.isDisabledForCallouts = true;
         insert thisAccount;
         return thisAccount.Id;
     }
@@ -81,13 +82,12 @@ global with sharing class AccountManager {
         String accountId = request.requestURI.substring(
                 request.requestURI.lastIndexOf('/') + 1
         );
-        List<Account> thisAccounts = [SELECT Id FROM Account WHERE External_Id__c = :accountId];
-        if (thisAccounts.isEmpty()) {
-            Account thisAccount = [SELECT Id FROM Account WHERE Id = :accountId];
-            delete thisAccount;
-        } else {
-            delete thisAccounts;
-        }
+
+        AccountTriggerHandler.isDisabledForCallouts = true;
+
+        List<Account> thisAccounts = [SELECT Id FROM Account WHERE External_Id__c = :accountId OR Id = :accountId];
+
+        delete thisAccounts;
     }
 
     @HttpPut
@@ -122,39 +122,12 @@ global with sharing class AccountManager {
             String rhesusFactor,
             Boolean isFree) {
 
-        if(String.isEmpty(isEmpty(externalId))) {
-            Account thisAccount = [SELECT Id FROM Account WHERE External_Id__c = :id];
-            thisAccount.ParentId = thisParentId(parentId);
-            thisAccount.Todo__c = thisTodoId(todoId);
-            thisAccount.Name = name;
-            thisAccount.AccountNumber = isEmpty(accountNumber);
-            thisAccount.Age__c = age;
-            thisAccount.Site = isEmpty(accountSite);
-            thisAccount.Phone = isEmpty(phone);
-            thisAccount.Fax = isEmpty(fax);
-            thisAccount.Website = isEmpty(webSite);
-            thisAccount.AnnualRevenue = annualRevenue;
-            thisAccount.NumberOfEmployees = numberOfEmployees;
-            thisAccount.Type = type;
-            thisAccount.Industry = industry;
-            thisAccount.Ownership = ownerShip;
-            thisAccount.Rating = rating;
-            thisAccount.Active__c = active;
-            thisAccount.BillingStreet = isEmpty(street);
-            thisAccount.BillingCity = isEmpty(city);
-            thisAccount.BillingPostalCode = isEmpty(postalCode);
-            thisAccount.BillingState = isEmpty(province);
-            thisAccount.BillingCountry = isEmpty(country);
-            thisAccount.Description = isEmpty(description);
-            thisAccount.CustomerPriority__c = customerPriority;
-            thisAccount.Gender__c = gender;
-            thisAccount.Blood_Type__c = bloodType;
-            thisAccount.Rhesus_Factor__c = rhesusFactor;
-            thisAccount.isFree__c = isFree;
-            update thisAccount;
-            return thisAccount.Id;
+        AccountTriggerHandler.isDisabledForCallouts = true;
+
+        Account thisAccount = [SELECT Id FROM Account WHERE External_Id__c = :id OR Id = :externalId];
+        if (thisAccount == null) {
+            return null;
         } else {
-            Account thisAccount = [SELECT Id FROM Account WHERE Id = :externalId];
             thisAccount.ParentId = thisParentId(parentId);
             thisAccount.Todo__c = thisTodoId(todoId);
             thisAccount.Name = name;
@@ -181,7 +154,7 @@ global with sharing class AccountManager {
             thisAccount.Gender__c = gender;
             thisAccount.Blood_Type__c = bloodType;
             thisAccount.Rhesus_Factor__c = rhesusFactor;
-            thisAccount.isFree__c = isFree;
+            thisAccount.IsFree__c = isFree;
             update thisAccount;
             return thisAccount.Id;
         }
@@ -200,11 +173,7 @@ global with sharing class AccountManager {
             return null;
         } else {
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
-            if (accountsId.isEmpty()) {
-                return id;
-            } else {
-                return accountsId[0].Id;
-            }
+            return accountsId.isEmpty() ? id : accountsId[0].Id;
         }
     }
 
@@ -213,11 +182,7 @@ global with sharing class AccountManager {
             return null;
         } else {
             List<Todo__c> todosId = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
-            if (todosId.isEmpty()) {
-                return id;
-            } else {
-                return todosId[0].Id;
-            }
+            return todosId.isEmpty() ? id : todosId[0].Id;
         }
     }
 }
