@@ -34,7 +34,7 @@ public with sharing class ContactCallouts {
                 '"salutation":"' + isEmpty(salutation) + '", ' +
                 '"firstName":"' + firstName + '", ' +
                 '"lastName":"' + lastName + '", ' +
-                '"accountId":"' + thisAccountId(accountId) + '", ' +
+                '"accountId":"' + getAccountId(accountId) + '", ' +
                 '"title":"' + title + '", ' +
                 '"department":"' + department + '", ' +
                 '"birthdate": ' + handleDate(birthdate) + ', ' +
@@ -64,7 +64,7 @@ public with sharing class ContactCallouts {
 
     @Future(Callout=true)
     public static void makeDeleteCallout(String id, String externalId) {
-        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
+        if (String.isNotEmpty(externalId)) {
             request.setEndpoint(ENDPOINT + externalId);
         } else {
             request.setEndpoint(ENDPOINT + id);
@@ -107,7 +107,7 @@ public with sharing class ContactCallouts {
                 '"salutation":"' + isEmpty(salutation) + '", ' +
                 '"firstName":"' + firstName + '", ' +
                 '"lastName":"' + lastName + '", ' +
-                '"accountId":"' + thisAccountId(accountId) + '", ' +
+                '"accountId":"' + getAccountId(accountId) + '", ' +
                 '"title":"' + title + '", ' +
                 '"department":"' + department + '", ' +
                 '"birthdate": ' + handleDate(birthdate) + ', ' +
@@ -137,35 +137,25 @@ public with sharing class ContactCallouts {
 
     private static String isEmpty(String checked) {
 
-        return checked = String.isBlank(checked) ? checked = '' : checked;
+        return String.isBlank(checked) ? '' : checked;
 
     }
 
-    private static String handleDate(DateTime thisDate) {
-
-        String dateSplit;
-        String dateTimeJson;
-
-        String checkDate = String.valueOfGmt(thisDate);
-
-        if (String.isNotBlank(checkDate)) {
-            dateSplit = String.valueOf(thisDate.dateGmt());
-            dateTimeJson = '"' + dateSplit + '"';
-        } else {
-            dateTimeJson = '"1921-01-01"';
-        }
-        return dateTimeJson;
+    private static String handleDate(Date thisDate) {
+        return thisDate != null
+                ? JSON.serialize(thisDate)
+                : JSON.serialize(Date.newInstance(1921, 1,1));
     }
 
-    private static String thisAccountId(String id) {
-        if (String.isEmpty(id)) {
+    private static String getAccountId(String id) {
+        if (String.isBlank(id)) {
             return null;
         } else {
             Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
-            if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
-                return account.External_Id__c;
+            if (account == null) {
+                return null;
             } else {
-                return account.Id;
+                return String.isNotBlank(account.External_Id__c) ? account.External_Id__c : account.Id;
             }
         }
     }

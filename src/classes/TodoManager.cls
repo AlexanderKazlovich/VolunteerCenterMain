@@ -46,6 +46,7 @@ global with sharing class TodoManager {
         TodoTriggerHandler.isDisabledForCallouts = true;
 
         List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :toDoId OR Id = :toDoId];
+        
         delete thisTodos;
     }
 
@@ -94,11 +95,7 @@ global with sharing class TodoManager {
             return null;
         } else {
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
-            if (accountsId.isEmpty()) {
-                return id;
-            } else {
-                return accountsId[0].Id;
-            }
+            return accountsId.isEmpty() ? id : accountsId[0].Id;
         }
     }
 

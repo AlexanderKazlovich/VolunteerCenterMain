@@ -110,12 +110,16 @@ public with sharing class TodoCallouts {
     }
 
     private static String getAccountId(String id) {
-        if (String.isBlank(id)) { return null; }
-
-        Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
-        if (account == null) { return null; }
-
-        return String.isNotBlank(account.External_Id__c) ? account.External_Id__c : account.Id;
+        if (String.isBlank(id)) {
+            return null;
+        } else {
+            Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
+            if (account == null) {
+                return null;
+            } else {
+                return String.isNotBlank(account.External_Id__c) ? account.External_Id__c : account.Id;
+            }
+        }
     }
 
     private static String getRecordTypeName(String recordTypeId) {

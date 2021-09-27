@@ -50,6 +50,7 @@ global with sharing class ContactManager {
                 Description = isEmpty(description));
 
         ContactTriggerHandler.isDisabledForCallouts = true;
+
         insert thisContact;
         return thisContact.Id;
     }
@@ -60,14 +61,12 @@ global with sharing class ContactManager {
         String contactId = request.requestURI.substring(
                 request.requestURI.lastIndexOf('/') + 1
         );
-        List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :contactId];
+        
         ContactTriggerHandler.isDisabledForCallouts = true;
-        if (thisContacts.isEmpty()) {
-            Contact thisContact = [SELECT Id FROM Contact WHERE Id = :contactId];
-            delete thisContact;
-        } else {
-            delete thisContacts;
-        }
+
+        List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :contactId OR Id = :contactId];
+        
+        delete thisContacts;
     }
 
     @HttpPut
@@ -93,29 +92,11 @@ global with sharing class ContactManager {
             String description) {
 
         ContactTriggerHandler.isDisabledForCallouts = true;
-        if(String.isEmpty(isEmpty(externalId))) {
-            Contact thisContact = [SELECT Id FROM Contact WHERE External_Id__c = :id];
-            thisContact.Salutation = salutation;
-            thisContact.FirstName = isEmpty(firstName);
-            thisContact.LastName = isEmpty(lastName);
-            thisContact.AccountId = thisAccountId(accountId);
-            thisContact.Title = isEmpty(title);
-            thisContact.Department = isEmpty(department);
-            thisContact.Birthdate = thisDate(birthdate);
-            thisContact.Phone = isEmpty(phone);
-            thisContact.MobilePhone = isEmpty(mobile);
-            thisContact.Fax = isEmpty(fax);
-            thisContact.Email = isEmpty(email);
-            thisContact.MailingStreet = isEmpty(street);
-            thisContact.MailingCity = isEmpty(city);
-            thisContact.MailingPostalCode = isEmpty(postalCode);
-            thisContact.MailingState = isEmpty(state);
-            thisContact.MailingCountry = isEmpty(country);
-            thisContact.Description = isEmpty(description);
-            update thisContact;
-            return thisContact.Id;
+
+        Contact thisContact = [SELECT Id FROM Contact WHERE External_Id__c = :id OR Id = :externalId];
+        if (thisContact == null) {
+            return null;
         } else {
-            Contact thisContact = [SELECT Id FROM Contact WHERE Id = :externalId];
             thisContact.Salutation = salutation;
             thisContact.FirstName = isEmpty(firstName);
             thisContact.LastName = isEmpty(lastName);
@@ -133,6 +114,7 @@ global with sharing class ContactManager {
             thisContact.MailingState = isEmpty(state);
             thisContact.MailingCountry = isEmpty(country);
             thisContact.Description = isEmpty(description);
+            
             update thisContact;
             return thisContact.Id;
         }
@@ -147,11 +129,7 @@ global with sharing class ContactManager {
             return null;
         } else {
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
-            if (accountsId.isEmpty()) {
-                return id;
-            } else {
-                return accountsId[0].Id;
-            }
+            return accountsId.isEmpty() ? id : accountsId[0].Id;
         }
     }
 

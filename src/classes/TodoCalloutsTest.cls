@@ -74,6 +74,4 @@ private class TodoCalloutsTest {
         System.assertEquals(0, [SELECT Id FROM Todo__c WHERE Name='testCallout' AND Status__c='New'].size());
         System.assertEquals(1, [SELECT Id FROM Todo__c WHERE Name='testCalloutUpdated' AND Status__c='Completed'].size());
     }
-
-
 }

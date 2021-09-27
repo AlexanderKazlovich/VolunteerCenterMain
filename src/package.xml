@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
+        <members>AccountCallouts</members>
+        <members>AccountCalloutsTest</members>
+        <members>AccountManager</members>
+        <members>AccountManagerTest</members>
+        <members>AccountTriggerHandler</members>
+        <members>AccountTriggerHelper</members>
+        <members>ContactCallouts</members>
+        <members>ContactCalloutsTest</members>
+        <members>ContactManager</members>
+        <members>ContactManagerTest</members>
+        <members>ContactTriggerHandler</members>
+        <members>ContactTriggerHelper</members>
+        <members>SubTodoCalloutTest</members>
+        <members>SubTodoCallouts</members>
+        <members>SubTodoManager</members>
+        <members>SubTodoTriggerHandler</members>
+        <members>SubTodoTriggerHelper</members>
+        <members>TodoCallouts</members>
+        <members>TodoCalloutsMock</members>
+        <members>TodoCalloutsTest</members>
+        <members>TodoCleanerBatch</members>
+        <members>TodoCleanerBatchTest</members>
+        <members>TodoCleanerScheduler</members>
+        <members>TodoListController</members>
+        <members>TodoManager</members>
+        <members>TodoTriggerHandler</members>
+        <members>TodoTriggerHelper</members>
+        <members>VolunteerManager</members>
+        <members>VolunteerManagerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>AccountTrigger</members>
+        <members>ContactTrigger</members>
+        <members>SubTodoTrigger</members>
+        <members>TodoTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>customLookup</members>
+        <members>errors</members>
+        <members>searchComponent</members>
+        <members>toDo</members>
+        <members>toDoItem</members>
         <name>LightningComponentBundle</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>StaticResource</name>
     </types>
     <version>52.0</version>
 </Package>

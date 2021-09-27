@@ -42,10 +42,10 @@ public class AccountCalloutsTest {
 
         Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
 
+        Test.startTest();
+
         Account account = new Account(Name = 'React');
         insert account;
-
-        Test.startTest();
 
         account.Name = 'Locky';
         update account;
@@ -54,5 +54,4 @@ public class AccountCalloutsTest {
 
         System.assertEquals(1, [SELECT Id FROM Account WHERE Name = 'Locky'].size());
     }
-
 }

@@ -12,8 +12,13 @@ public class SubTodoCalloutTest {
 
         Test.startTest();
 
+        Todo__c toDo = new Todo__c(
+            Name = 'Done');
+        insert toDo;
+
         Sub_Todo__c subTodo = new Sub_Todo__c(
-                Name = 'Groom');
+                Name = 'Groom',
+                Todo__c = toDo.Id);
         insert subTodo;
 
         Test.stopTest();
@@ -28,8 +33,13 @@ public class SubTodoCalloutTest {
 
         Test.startTest();
 
+        Todo__c toDo = new Todo__c(
+            Name = 'Done');
+        insert toDo;
+
         Sub_Todo__c subTodo = new Sub_Todo__c(
-                Name = 'Groom');
+                Name = 'Groom',
+                Todo__c = toDo.Id);
         insert subTodo;
 
         delete subTodo;
@@ -45,12 +55,16 @@ public class SubTodoCalloutTest {
 
         Test.setMock(HttpCalloutMock.class, new TodoCalloutsMock());
 
-        Sub_Todo__c subTodo = new Sub_Todo__c(
-                Name = 'Groom');
-        insert subTodo;
-
         Test.startTest();
 
+        Todo__c toDo = new Todo__c(
+            Name = 'Done');
+        insert toDo;
+
+        Sub_Todo__c subTodo = new Sub_Todo__c(
+                Name = 'Groom',
+                Todo__c = toDo.Id);
+        insert subTodo;
         subTodo.Name = 'Locky';
         update subTodo;
 

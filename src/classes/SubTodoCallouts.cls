@@ -15,8 +15,7 @@ public class SubTodoCallouts {
             String purchase,
             String comments,
             Boolean isCompleted,
-            String todoId,
-            String subTodoId) {
+            String todoId) {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
@@ -24,8 +23,7 @@ public class SubTodoCallouts {
                 '"purchase" : "' + purchase + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"isCompleted" : ' + isCompleted + ', ' +
-                '"todoId" : "' + thisTodoId(todoId) + '", ' +
-                '"subTodoId" : "' + thisSubTodoId(subTodoId) + '"}';
+                '"todoId" : "' + getTodoId(todoId) + '"}';
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -41,7 +39,7 @@ public class SubTodoCallouts {
 
     @Future(Callout=true)
     public static void makeDeleteCallout(String id, String externalId) {
-        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
+        if (String.isNotEmpty(externalId)) {
             request.setEndpoint(ENDPOINT + externalId);
         } else {
             request.setEndpoint(ENDPOINT + id);
@@ -63,9 +61,7 @@ public class SubTodoCallouts {
             String name,
             String purchase,
             String comments,
-            Boolean isCompleted,
-            String todoId,
-            String subTodoId) {
+            Boolean isCompleted) {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
@@ -73,9 +69,7 @@ public class SubTodoCallouts {
                 '"name":"' + name + '", ' +
                 '"purchase" : "' + purchase + '", ' +
                 '"comments":"' + comments + '", ' +
-                '"isCompleted" : ' + isCompleted + ', ' +
-                '"todoId" : "' + thisTodoId(todoId) + '", ' +
-                '"subTodoId" : "' + thisSubTodoId(subTodoId) + '"}';
+                '"isCompleted" : ' + isCompleted + '}';
         request.setEndpoint(ENDPOINT);
         request.setMethod('PUT');
         request.setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -85,32 +79,19 @@ public class SubTodoCallouts {
             System.debug('The status code returned was not expected: ' +
                     response.getStatusCode() + ' ' + response.getStatus());
         } else {
-            System.debug('The SubTodo is successful created with Id ' + response.getBody());
+            System.debug('The SubTodo is successful changed with Id ' + response.getBody());
         }
     }
 
-    private static String thisSubTodoId(String id) {
-        if (String.isEmpty(id)) {
-            return null;
-        } else {
-            Sub_Todo__c thisSubTodo = [SELECT Id, External_Id__c FROM Sub_Todo__c WHERE Id = :id];
-            if (String.isNotEmpty(thisSubTodo.Id) && String.isNotEmpty(thisSubTodo.External_Id__c)) {
-                return thisSubTodo.External_Id__c;
-            } else {
-                return thisSubTodo.Id;
-            }
-        }
-    }
-
-    private static String thisTodoId(String id) {
+    private static String getTodoId(String id) {
         if (String.isEmpty(id)) {
             return null;
         } else {
             Todo__c thisTodo = [SELECT Id, External_Id__c FROM Todo__c WHERE Id = :id];
-            if (String.isNotEmpty(thisTodo.Id) && String.isNotEmpty(thisTodo.External_Id__c)) {
-                return thisTodo.External_Id__c;
+            if (thisTodo == null) {
+                return null;
             } else {
-                return thisTodo.Id;
+                return String.isNotBlank(thisTodo.External_Id__c) ? thisTodo.External_Id__c : thisTodo.Id;
             }
         }
     }
