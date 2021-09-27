@@ -49,6 +49,8 @@ global with sharing class ContactManager {
                 MailingCountry = isEmpty(country),
                 Description = isEmpty(description));
 
+        ContactTriggerHandler.isDisabledForCallouts = true;
+
         insert thisContact;
         return thisContact.Id;
     }
@@ -59,13 +61,12 @@ global with sharing class ContactManager {
         String contactId = request.requestURI.substring(
                 request.requestURI.lastIndexOf('/') + 1
         );
-        List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :contactId];
-        if (thisContacts.isEmpty()) {
-            Contact thisContact = [SELECT Id FROM Contact WHERE Id = :contactId];
-            delete thisContact;
-        } else {
-            delete thisContacts;
-        }
+        
+        ContactTriggerHandler.isDisabledForCallouts = true;
+
+        List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :contactId OR Id = :contactId];
+        
+        delete thisContacts;
     }
 
     @HttpPut
@@ -90,9 +91,12 @@ global with sharing class ContactManager {
             String country,
             String description) {
 
-        List<Contact> thisContacts = [SELECT Id FROM Contact WHERE External_Id__c = :id];
-        if (thisContacts.isEmpty()) {
-            Contact thisContact = [SELECT Id FROM Contact WHERE Id = :externalId];
+        ContactTriggerHandler.isDisabledForCallouts = true;
+
+        Contact thisContact = [SELECT Id FROM Contact WHERE External_Id__c = :id OR Id = :externalId];
+        if (thisContact == null) {
+            return null;
+        } else {
             thisContact.Salutation = salutation;
             thisContact.FirstName = isEmpty(firstName);
             thisContact.LastName = isEmpty(lastName);
@@ -110,33 +114,14 @@ global with sharing class ContactManager {
             thisContact.MailingState = isEmpty(state);
             thisContact.MailingCountry = isEmpty(country);
             thisContact.Description = isEmpty(description);
+            
             update thisContact;
             return thisContact.Id;
-        } else {
-            thisContacts[0].Salutation = salutation;
-            thisContacts[0].FirstName = isEmpty(firstName);
-            thisContacts[0].LastName = isEmpty(lastName);
-            thisContacts[0].AccountId = thisAccountId(accountId);
-            thisContacts[0].Title = isEmpty(title);
-            thisContacts[0].Department = isEmpty(department);
-            thisContacts[0].Birthdate = thisDate(birthdate);
-            thisContacts[0].Phone = isEmpty(phone);
-            thisContacts[0].MobilePhone = isEmpty(mobile);
-            thisContacts[0].Fax = isEmpty(fax);
-            thisContacts[0].Email = isEmpty(email);
-            thisContacts[0].MailingStreet = isEmpty(street);
-            thisContacts[0].MailingCity = isEmpty(city);
-            thisContacts[0].MailingPostalCode = isEmpty(postalCode);
-            thisContacts[0].MailingState = isEmpty(state);
-            thisContacts[0].MailingCountry = isEmpty(country);
-            thisContacts[0].Description = isEmpty(description);
-            update thisContacts[0];
-            return thisContacts[0].Id;
         }
     }
 
     private static String isEmpty(String checkEntity) {
-        return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
+        return checkEntity.equalsIgnoreCase(CHECK_NULL) ? null : checkEntity;
     }
 
     private static String thisAccountId(String id) {
@@ -144,16 +129,12 @@ global with sharing class ContactManager {
             return null;
         } else {
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
-            if (accountsId.isEmpty()) {
-                return id;
-            } else {
-                return accountsId[0].Id;
-            }
+            return accountsId.isEmpty() ? id : accountsId[0].Id;
         }
     }
 
     private static Date thisDate(Date checkEntity) {
         String checkThisDateTime = String.valueOfGmt(checkEntity);
-        return checkEntity = checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? checkEntity = null : checkEntity;
+        return checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? null : checkEntity;
     }
 }

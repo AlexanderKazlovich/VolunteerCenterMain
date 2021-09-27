@@ -5,7 +5,7 @@
 @RestResource(UrlMapping='/Todo__c/*')
 global with sharing class TodoManager {
 
-    private static final String CHECK_DATE = '1921-01-01 00:00:00';
+    private static final String CHECK_DATE = '1920-12-31 22:10:00';
     private static final String CHECK_NULL = 'null';
 
     @HttpPost
@@ -31,6 +31,8 @@ global with sharing class TodoManager {
                 External_Id__c = id,
                 Status__c = status);
 
+        TodoTriggerHandler.isDisabledForCallouts = true;
+
         insert thisTodo;
         return thisTodo.Id;
     }
@@ -38,16 +40,14 @@ global with sharing class TodoManager {
     @HttpDelete
     global static void deleteTodo() {
         RestRequest request = RestContext.request;
-        String todoId = request.requestURI.substring(
-                request.requestURI.lastIndexOf('/') + 1
-        );
-        List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :todoId];
-        if (thisTodos.isEmpty()) {
-            Todo__c thisTodo = [SELECT Id FROM Todo__c WHERE Id = :todoId];
-            delete thisTodo;
-        } else {
-            delete thisTodos;
-        }
+        String toDoId = request.requestURI.substring(
+                request.requestURI.lastIndexOf('/') + 1);
+
+        TodoTriggerHandler.isDisabledForCallouts = true;
+
+        List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :toDoId OR Id = :toDoId];
+        
+        delete thisTodos;
     }
 
     @HttpPut
@@ -62,55 +62,44 @@ global with sharing class TodoManager {
             String purchase,
             String status) {
 
-        List<Todo__c> thisTodos = [SELECT Id FROM Todo__c WHERE External_Id__c = :id];
-        if (thisTodos.isEmpty()) {
-            Todo__c thisTodo = [SELECT Id FROM Todo__c WHERE Id = :externalId];
-            thisTodo.Name = name;
-            thisTodo.Account__c = thisAccountId(accountId);
-            thisTodo.Comments__c = isEmpty(comments);
-            thisTodo.DateTime__c = isEmptyDateTime(thisDateTime);
-            thisTodo.Priority__c = priority;
-            thisTodo.Purchase__c = isEmpty(purchase);
-            thisTodo.Status__c = status;
-            update thisTodo;
-            return thisTodo.Id;
+        TodoTriggerHandler.isDisabledForCallouts = true;
+
+        Todo__c thisToDo = [SELECT Id FROM Todo__c WHERE External_Id__c = :id OR Id = :externalId];
+        if (thisToDo == null) {
+            return null;
         } else {
-            thisTodos[0].Name = name;
-            thisTodos[0].Account__c = thisAccountId(accountId);
-            thisTodos[0].Comments__c = isEmpty(comments);
-            thisTodos[0].DateTime__c = isEmptyDateTime(thisDateTime);
-            thisTodos[0].Priority__c = priority;
-            thisTodos[0].Purchase__c = isEmpty(purchase);
-            thisTodos[0].Status__c = status;
-            update thisTodos;
-            return thisTodos[0].Id;
+            thisToDo.Name = name;
+            thisToDo.Account__c = thisAccountId(accountId);
+            thisToDo.Comments__c = isEmpty(comments);
+            thisToDo.DateTime__c = isEmptyDateTime(thisDateTime);
+            thisToDo.Priority__c = priority;
+            thisToDo.Purchase__c = isEmpty(purchase);
+            thisToDo.Status__c = status;
+
+            update thisToDo;
+            return thisToDo.Id;
         }
     }
 
     private static String isEmpty(String checkEntity) {
-        return checkEntity = checkEntity.equalsIgnoreCase(CHECK_NULL) ? checkEntity = null : checkEntity;
+        return checkEntity.equalsIgnoreCase(CHECK_NULL) ? null : checkEntity;
     }
 
     private static Datetime isEmptyDateTime(Datetime checkEntity) {
         String checkThisDateTime = String.valueOfGmt(checkEntity);
-        return checkEntity = checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? checkEntity = null : checkEntity;
+        return checkThisDateTime.equalsIgnoreCase(CHECK_DATE) ? null : checkEntity;
     }
 
     private static String thisAccountId(String id) {
-        if (String.isEmpty(isEmpty(id))) {
+        if (String.isBlank(isEmpty(id))) {
             return null;
         } else {
             List<Account> accountsId = [SELECT Id FROM Account WHERE External_Id__c = :id];
-            if (accountsId.isEmpty()) {
-                return id;
-            } else {
-                return accountsId[0].Id;
-            }
+            return accountsId.isEmpty() ? id : accountsId[0].Id;
         }
     }
 
     private static String thisRecordType(String recordType) {
-        RecordType thisRecordType  = [SELECT Id FROM RecordType WHERE RecordType.Name = :recordType];
-        return thisRecordType.Id;
+        return [SELECT Id FROM RecordType WHERE RecordType.Name = :recordType].get(0).Id;
     }
 }

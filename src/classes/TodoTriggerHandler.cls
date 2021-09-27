@@ -4,9 +4,11 @@
 
 public with sharing class TodoTriggerHandler {
 
+    public static Boolean isDisabledForCallouts = false;
+
     public static void handleBeforeInsert(List<Todo__c> newList) {
-        TodoTriggerHelper.assignTodoOnQueue(newList);
-        // EXECUTE BEFORE INSERT LOGIC
+            TodoTriggerHelper.assignTodoOnQueue(newList);
+            // EXECUTE BEFORE INSERT LOGIC
     }
 
     public static void handleBeforeUpdate(List<Todo__c> oldList, List<Todo__c> newList, Map<Id, Todo__c> newMap, Map<Id, Todo__c> oldMap) {
@@ -19,17 +21,21 @@ public with sharing class TodoTriggerHandler {
     }
 
     public static void handleAfterInsert(List<Todo__c> newList, Map<Id, Todo__c> newMap) {
-        TodoTriggerHelper.makeCallouts(newList);
-        // EXECUTE AFTER INSERT LOGIC
+        if (!isDisabledForCallouts) {
+            TodoTriggerHelper.makeCallouts(newList);
+            // EXECUTE AFTER INSERT LOGIC
+        }
     }
 
     public static void handleAfterUpdate(List<Todo__c> oldList, List<Todo__c> newList, Map<Id, Todo__c> newMap, Map<Id, Todo__c> oldMap) {
-        TodoTriggerHelper.putCallouts(newList);
-        // AFTER UPDATE LOGIC
+        if(!isDisabledForCallouts){
+            TodoTriggerHelper.putCallouts(newList);
+            // AFTER UPDATE LOGIC
+        }
     }
 
     public static void handleAfterDelete(List<Todo__c> oldList, Map<Id, Todo__c> oldMap) {
-        if(!System.isBatch()){
+        if(!System.isBatch() && !isDisabledForCallouts){
             TodoTriggerHelper.deleteCallouts(oldList);
         }
         // AFTER DELETE LOGIC

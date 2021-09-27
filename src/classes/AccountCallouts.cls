@@ -42,8 +42,8 @@ public with sharing class AccountCallouts {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
-                '"parentId":"' + thisParentId(parentId) + '", ' +
-                '"todoId":"' + thisTodoId(todoId) + '", ' +
+                '"parentId":"' + getParentId(parentId) + '", ' +
+                '"todoId":"' + getTodoId(todoId) + '", ' +
                 '"recordType":"' + recordTypeName(recordTypeId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"accountNumber":"' + accountNumber + '", ' +
@@ -85,7 +85,7 @@ public with sharing class AccountCallouts {
 
     @Future(Callout=true)
     public static void makeDeleteCallout(String id, String externalId) {
-        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
+        if (String.isNotEmpty(externalId)) {
             request.setEndpoint(ENDPOINT + externalId);
         } else {
             request.setEndpoint(ENDPOINT + id);
@@ -135,8 +135,8 @@ public with sharing class AccountCallouts {
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"externalId":"' + externalId + '", ' +
-                '"parentId":"' + thisParentId(parentId) + '", ' +
-                '"todoId":"' + thisTodoId(todoId) + '", ' +
+                '"parentId":"' + getParentId(parentId) + '", ' +
+                '"todoId":"' + getTodoId(todoId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"accountNumber":"' + accountNumber + '", ' +
                 '"age":' + age + ', ' +
@@ -185,28 +185,28 @@ public with sharing class AccountCallouts {
         return thisRecordType.Name;
     }
 
-    private static String thisParentId(String id) {
-        if (String.isEmpty(id)) {
+    private static String getParentId(String id) {
+        if (String.isBlank(id)) {
             return null;
         } else {
             Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
-            if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
-                return account.External_Id__c;
+            if (account == null) {
+                return null;
             } else {
-                return account.Id;
+                return String.isNotBlank(account.External_Id__c) ? account.External_Id__c : account.Id;
             }
         }
     }
 
-    private static String thisTodoId(String id) {
+    private static String getTodoId(String id) {
         if (String.isEmpty(id)) {
             return null;
         } else {
             Todo__c thisTodo = [SELECT Id, External_Id__c FROM Todo__c WHERE Id = :id];
-            if (String.isNotEmpty(thisTodo.Id) && String.isNotEmpty(thisTodo.External_Id__c)) {
-                return thisTodo.External_Id__c;
+            if (thisTodo == null) {
+                return null;
             } else {
-                return thisTodo.Id;
+                return String.isNotBlank(thisTodo.External_Id__c) ? thisTodo.External_Id__c : thisTodo.Id;
             }
         }
     }

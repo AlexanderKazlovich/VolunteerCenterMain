@@ -1,0 +1,68 @@
+.tab-container {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.tab-container li{
+    align-self: center;
+}
+:host {
+    --sds-c-checkbox-color-background-checked: rgb(27, 150, 255);
+    --sds-c-checkbox-mark-color-foreground: white;
+}
+
+.completed-subtodo{
+    text-decoration: line-through;
+}
+
+.subtodo-input{
+    padding-right: 10%;
+    width: 600px;
+}
+
+.name_sub_todo_div{
+    width: 83%;
+    text-decoration: line-through;
+}
+
+.input-create-field{
+    width: 83%;
+}
+.name_sub_todo_active_div{
+    width: 83%;
+}
+.create-width-form{
+    width: 400px;
+}
+
+.create-width{
+    width: 580px;
+}
+
+.sab-todo-name-input{
+    width: 80%;
+}
+.sub-todo-block{
+    border-width: thin;
+}
+.header-name-block{
+    width: 83%;
+}
+
+.subTodoTask{
+    border: 1px solid #EAEBEC;
+    background-color: #EAEBEC;
+    border-radius: 5px;
+    margin-top: 10px;
+    width: 15%;
+    text-align: center;
+    font-size: 18px;
+    color: #2955ce;
+}
+
+.deleteSubToDo{
+    font-size: 18px;
+    color: red;
+
+}

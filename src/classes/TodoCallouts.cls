@@ -22,14 +22,16 @@ public with sharing class TodoCallouts {
 
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
-                '"accountId":"' + thisAccountId(accountId) + '", ' +
-                '"recordTypeName":"' + recordTypeName(recordTypeId) + '", ' +
+                '"accountId":"' + getAccountId(accountId) + '", ' +
+                '"recordTypeName":"' + getRecordTypeName(recordTypeId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
                 '"priority" : "' + isEmpty(priority) + '", ' +
                 '"purchase" : "' + purchase + '", ' +
                 '"status" : "' + isEmpty(status) + '" }';
+
+        System.debug(populateBody);
 
         request.setEndpoint(ENDPOINT);
         request.setMethod('POST');
@@ -44,10 +46,9 @@ public with sharing class TodoCallouts {
         }
     }
 
-
     @Future(Callout=true)
     public static void makeDeleteCallout(String id, String externalId) {
-        if (String.isNotEmpty(id) && String.isNotEmpty(externalId)) {
+        if (String.isNotEmpty(externalId)) {
             request.setEndpoint(ENDPOINT + externalId);
         } else {
             request.setEndpoint(ENDPOINT + id);
@@ -77,14 +78,13 @@ public with sharing class TodoCallouts {
         String populateBody = '{' +
                 '"id":"' + id + '", ' +
                 '"externalId":"' + externalId + '", ' +
-                '"accountId":"' + thisAccountId(accountId) + '", ' +
+                '"accountId":"' + getAccountId(accountId) + '", ' +
                 '"name":"' + name + '", ' +
                 '"comments":"' + comments + '", ' +
                 '"thisDateTime" : ' + handleDateTime(thisDateTime) + ', ' +
                 '"priority" : "' + isEmpty(priority) + '", ' +
                 '"purchase" : "' + purchase + '", ' +
                 '"status" : "' + isEmpty(status) + '" }';
-
 
         request.setEndpoint(ENDPOINT);
         request.setMethod('PUT');
@@ -100,44 +100,29 @@ public with sharing class TodoCallouts {
     }
 
     private static String handleDateTime(Datetime thisDateTime) {
-
-        String dateSplit;
-        String timeSplit;
-        String dateTimeJson;
-
-        String checkDate = String.valueOfGmt(thisDateTime);
-
-        if (String.isNotBlank(checkDate)) {
-            dateSplit = String.valueOf(thisDateTime.dateGmt());
-            timeSplit = String.valueOf(thisDateTime.timeGmt());
-            dateTimeJson = '"' + dateSplit + 'T' + timeSplit + '"';
-        } else {
-            dateTimeJson = '"1921-01-01T00:00:00.000Z"';
-        }
-        return dateTimeJson;
+        return thisDateTime != null
+                ? JSON.serialize(thisDateTime)
+                : JSON.serialize(Datetime.newInstance(1921, 1,1));
     }
 
     private static String isEmpty(String checked) {
-
-        return checked = String.isBlank(checked) ? checked = '' : checked;
-
+        return checked = String.isBlank(checked) ? '' : checked;
     }
 
-    private static String thisAccountId(String id) {
-        if (String.isEmpty(id)) {
+    private static String getAccountId(String id) {
+        if (String.isBlank(id)) {
             return null;
         } else {
             Account account = [SELECT Id, External_Id__c FROM Account WHERE Id = :id];
-            if (String.isNotEmpty(account.Id) && String.isNotEmpty(account.External_Id__c)) {
-                return account.External_Id__c;
+            if (account == null) {
+                return null;
             } else {
-                return account.Id;
+                return String.isNotBlank(account.External_Id__c) ? account.External_Id__c : account.Id;
             }
         }
     }
 
-    private static String recordTypeName(String recordTypeId) {
-        RecordType thisRecordType = [SELECT Name FROM RecordType WHERE Id = :recordTypeId];
-        return thisRecordType.Name;
+    private static String getRecordTypeName(String recordTypeId) {
+        return [SELECT Name FROM RecordType WHERE Id = :recordTypeId][0].Name;
     }
 }
